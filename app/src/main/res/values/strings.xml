@@ -1,0 +1,99 @@
+<resources>
+    <string name="app_name">Journal</string>
+    <string name="title_bookmark">Bookmark</string>
+    <string name="fragment_details">Article Page</string>
+    <string name="remove_article">Remove Article</string>
+
+    <string name="no_internet_connection">No Internet Connection</string>
+    <string name="logo">logo</string>
+    <string name="loading">Loading</string>
+    <string name="no_data">No Data</string>
+
+    <string name="article_saved">Article Saved</string>
+
+
+    <!--Masrawy Categories-->
+    <string name="theNews">الأخبار</string>
+    <string name="sports">رياضة</string>
+    <string name="lifeStyle">لايف ستايل</string>
+    <string name="arts">فنون</string>
+    <string name="cars">سيارات</string>
+    <string name="islamic">إسلاميات</string>
+
+    <!--Masrawy Sub-Categories-->
+    <string name="main">الرئيسية</string>
+    <string name="Egypt">مصر</string>
+    <string name="ArabsAndTheWorld">عرب وعالم</string>
+    <string name="Journalism">صحافة</string>
+    <string name="Economy">إقتصاد</string>
+    <string name="accidents">حوادث</string>
+    <string name="Governorates">محافظات</string>
+    <string name="ReportsAndInvestigations">تقارير وتحقيقات</string>
+    <string name="Articles">مقالات</string>
+    <string name="newsVideos">فيديوهات إخبارية</string>
+    <string name="Technology">علوم وتكنولوجيا</string>
+    <string name="oldNews">أخبار زمان</string>
+
+    <string name="local">أخبار محلية</string>
+    <string name="ArabAndWorldNews">أخبار عربية وعالمية</string>
+    <string name="otherSports">رياضات أخرى</string>
+    <string name="opinions">آراء حرة</string>
+    <string name="PhotoAlbum">ألبوم الصور</string>
+    <string name="SportsVideos">فيديوهات رياضية</string>
+
+    <string name="FashionAndBeauty">الموضة والجمال</string>
+    <string name="Relations">علاقات</string>
+    <string name="kitchen">مطبخ مصراوى</string>
+    <string name="MedicalTips">نصائح طبية</string>
+    <string name="Pregnancy">الحمل والأمومة</string>
+    <string name="man">الرجل</string>
+    <string name="travel">سفر وسياحة</string>
+
+    <string name="music">موسيقى</string>
+    <string name="TheaterAndTelevision">مسرح وتليفزيون</string>
+    <string name="Cinema">سينما</string>
+    <string name="Zoom">زووم</string>
+    <string name="Foreign">أجنبى</string>
+    <string name="ArtVideos">فيديوهات فنية</string>
+    <string name="blackAndWhite">أبيض وأسود</string>
+
+    <string name="news">أخبار</string>
+    <string name="CarsVideos">فيديوهات سيارات</string>
+    <string name="Races">سباقات</string>
+    <string name="Tips">نصائح</string>
+
+    <string name="Fatwas">فتاوى</string>
+    <string name="Prophet">السيرة النبوية</string>
+    <string name="Quran">القرآن الكريم</string>
+    <string name="Other">أخرى</string>
+    <string name="Stories">قصص وعبر</string>
+    <string name="IslamicVideos">فيديوهات إسلامية</string>
+
+    <!--Youm7 Categories-->
+    <string name="BreakingNews">أخبار عاجلة</string>
+    <string name="Policy">سياسة</string>
+    <string name="EgyptianReports">تقارير مصرية</string>
+    <string name="NewsSports">أخبار الرياضة</string>
+    <string name="universalBall">كرة عالمية</string>
+    <string name="art">فن</string>
+    <string name="TV">تليفزيون</string>
+    <string name="ArabicNews">أخبار عربية</string>
+    <string name="InternationalNews">أخبار عالمية</string>
+    <string name="culture">ثقافة</string>
+    <string name="WomenAndMiscellaneous">المرأة والمنوعات</string>
+    <string name="HealthAndMedicine">صحة و طب</string>
+    <string name="CitizenJournalism">صحافة المواطن</string>
+    <string name="SeventhDayAlbums">ألبومات اليوم السابع</string>
+    <string name="ComicsToday">كاريكاتير اليوم</string>
+    <string name="Horoscope">حظك اليوم</string>
+
+
+    <!--Alarabiya Categories-->
+    <string name="SaudiArabia">السعودية</string>
+    <string name="Miscellaneous">منوعة</string>
+    <string name="recentNews">أخبار الأخيرة</string>
+    <string name="delete_all">Delete All</string>
+    <string name="filter">Filter</string>
+
+
+</resources>

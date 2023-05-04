@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_newsfeed">
+
+    <fragment
+        android:id="@+id/navigation_newsfeed"
+        android:name="online.mohmedbakr.newsfeed.ui.newsfeed.NewsfeedFragment"
+        android:label="@string/app_name"
+        tools:layout="@layout/fragment_newsfeed">
+        <action
+            android:id="@+id/action_navigation_newsfeed_to_detailsFragment"
+            app:destination="@id/detailsFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            app:popUpTo="@id/navigation_newsfeed"
+            app:popUpToInclusive="false" />
+        <action
+            android:id="@+id/action_navigation_newsfeed_to_navigation_bookmark"
+            app:destination="@id/navigation_bookmark" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_bookmark"
+        android:name="online.mohmedbakr.newsfeed.ui.bookmark.BookmarkFragment"
+        android:label="@string/title_bookmark"
+        tools:layout="@layout/fragment_bookmark">
+        <action
+            android:id="@+id/action_navigation_bookmark_to_detailsFragment"
+            app:destination="@id/detailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/detailsFragment"
+        android:name="online.mohmedbakr.newsfeed.ui.details.DetailsFragment"
+        android:label="@string/fragment_details"
+        tools:layout="@layout/fragment_details">
+        <argument
+            android:name="link"
+            app:argType="string" />
+    </fragment>
+</navigation>
