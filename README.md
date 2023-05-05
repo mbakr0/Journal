@@ -14,7 +14,7 @@
   6 - Alhadath
   
   7 - Aljazeera
-  
+
   8 - Youm7
        
   easy to implement other news sources
