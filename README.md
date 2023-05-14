@@ -53,7 +53,6 @@ I would like to share with you my first app published on the Google Play Store.
 
 I built the **Journal NewsFeed** app from scratch
 
-If you like my app, you can download it on Google Play.
-https://play.google.com/store/apps/details?id=online.mohmedbakr.newsfeed
+If you like my app, you can download it on Google Play. [HERE](https://play.google.com/store/apps/details?id=online.mohmedbakr.newsfeed)
 
 
