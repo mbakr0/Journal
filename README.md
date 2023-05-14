@@ -51,11 +51,9 @@ Using Rss Reader to parse rss feed and display it in a RecyclerView
 
 I would like to share with you my first app published on the Google Play Store.
 
-
 I built the **Journal NewsFeed** app from scratch
-The differences are as follows.
-
 
 If you like my app, you can download it on Google Play.
+https://play.google.com/store/apps/details?id=online.mohmedbakr.newsfeed
 
 
