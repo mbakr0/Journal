@@ -42,7 +42,6 @@ Using Rss Reader to parse rss feed and display it in a RecyclerView
 * Room Database
 
 
-### Screenshots
 
 
 ```
