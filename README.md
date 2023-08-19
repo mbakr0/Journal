@@ -3,8 +3,8 @@
  
 ### Project Overview
 
-The goal is to create a News Feed app which gives a user regularly-updated news from different sources
-Using Rss Reader to parse rss feed and display it in a RecyclerView 
+The goal is to create a News Feed app that gives a user regularly-updated news from different sources
+Using RSS Reader to parse RSS feed and display it in a RecyclerView 
 
 
 ### Soucres
@@ -40,18 +40,11 @@ Using Rss Reader to parse rss feed and display it in a RecyclerView
 * RSS Parser
 * Preferences DataStore
 * Room Database
+  
+
+[2023-08-04_21-11-41.webm](https://github.com/mbakr0/Journal/assets/24358810/d569f14c-fd1a-4dea-95d6-a0e429d911d9)
 
 
-
-
-```
-
-# NewsFeed 
-
-I would like to share with you my first app published on the Google Play Store.
-
-I built the **Journal NewsFeed** app from scratch
-```
 If you like my app, you can download it on Google Play. 
 [HERE](https://play.google.com/store/apps/details?id=online.mohmedbakr.newsfeed)
 
