@@ -45,8 +45,7 @@ Using RSS Reader to parse RSS feed and display it in a RecyclerView
 [2023-08-04_21-11-41.webm](https://github.com/mbakr0/Journal/assets/24358810/d569f14c-fd1a-4dea-95d6-a0e429d911d9)
 
 
-If you like my app, you can download it on Google Play. 
-[HERE](https://play.google.com/store/apps/details?id=online.mohmedbakr.newsfeed)
+[Google Play](https://play.google.com/store/apps/details?id=online.mohmedbakr.newsfeed)
 
 
 
