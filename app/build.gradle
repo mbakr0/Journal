@@ -9,7 +9,7 @@ plugins {
 
 android {
     namespace 'online.mohmedbakr.newsfeed'
-    compileSdk 34
+    compileSdk 35
 
     defaultConfig {
         applicationId "online.mohmedbakr.newsfeed"
@@ -45,7 +45,7 @@ android {
 }
 
 dependencies {
-
+    ksp "com.google.devtools.ksp:symbol-processing-api:2.0.21-1.0.27"
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.5'
     implementation 'androidx.appcompat:appcompat:1.7.1'
     implementation 'com.google.android.material:material:1.12.0'
