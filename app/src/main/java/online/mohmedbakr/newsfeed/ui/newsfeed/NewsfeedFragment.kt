@@ -32,11 +32,11 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import online.mohmedbakr.newsfeed.R
 import online.mohmedbakr.newsfeed.core.ConstantsName
-import online.mohmedbakr.newsfeed.data.dataStore.PreferencesKey
-import online.mohmedbakr.newsfeed.data.dataStore.filterPreferencesDataStore
+import online.mohmedbakr.newsfeed.data.datasources.local.PreferencesKey
+import online.mohmedbakr.newsfeed.data.datasources.local.filterPreferencesDataStore
 import online.mohmedbakr.newsfeed.databinding.ChipGroupBinding
 import online.mohmedbakr.newsfeed.databinding.FragmentNewsfeedBinding
-import online.mohmedbakr.newsfeed.source.CategoriesRepository
+import online.mohmedbakr.newsfeed.data.repository.CategoriesRepository
 import online.mohmedbakr.newsfeed.ui.MainActivity
 import online.mohmedbakr.newsfeed.ui.newsfeed.newsfragment.SingleNewspaperViewpagerAdapter
 

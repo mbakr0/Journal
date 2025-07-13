@@ -2,7 +2,7 @@ package online.mohmedbakr.newsfeed.ui.newsfeed.newsfragment
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import online.mohmedbakr.newsfeed.source.FeedRepository
+import online.mohmedbakr.newsfeed.data.repository.FeedRepository
 
 class SingleNewspaperViewModelFactory(
     private val repository: FeedRepository,

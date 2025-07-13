@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import online.mohmedbakr.newsfeed.data.database.Article
+import online.mohmedbakr.newsfeed.data.model.Article
 import online.mohmedbakr.newsfeed.databinding.BookmarkListItemBinding
 
 class BookmarkRecyclerView(

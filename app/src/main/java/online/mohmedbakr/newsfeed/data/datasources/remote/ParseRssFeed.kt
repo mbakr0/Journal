@@ -1,10 +1,11 @@
-package online.mohmedbakr.newsfeed.network
+package online.mohmedbakr.newsfeed.data.datasources.remote
 
 
 import android.util.Log
 import online.mohmedbakr.newsfeed.core.ArticleDTO
 import online.mohmedbakr.newsfeed.core.ConstantsName
 import online.mohmedbakr.newsfeed.core.Response
+import online.mohmedbakr.newsfeed.data.model.RssElements
 import java.io.IOException
 import java.io.InputStream
 import java.net.HttpURLConnection

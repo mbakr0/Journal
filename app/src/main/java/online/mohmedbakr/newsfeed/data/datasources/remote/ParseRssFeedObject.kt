@@ -1,4 +1,4 @@
-package online.mohmedbakr.newsfeed.network
+package online.mohmedbakr.newsfeed.data.datasources.remote
 
 
 object ParseRssFeedObject {

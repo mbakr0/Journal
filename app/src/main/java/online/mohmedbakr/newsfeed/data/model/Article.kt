@@ -1,4 +1,4 @@
-package online.mohmedbakr.newsfeed.data.database
+package online.mohmedbakr.newsfeed.data.model
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity

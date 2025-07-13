@@ -5,7 +5,7 @@
 
         <variable
             name="article"
-            type="online.mohmedbakr.newsfeed.data.database.Article" />
+            type="online.mohmedbakr.newsfeed.data.model.Article" />
     </data>
 
 

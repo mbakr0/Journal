@@ -17,8 +17,8 @@ import online.mohmedbakr.newsfeed.NewsfeedApplication
 import online.mohmedbakr.newsfeed.R
 import online.mohmedbakr.newsfeed.core.Response
 import online.mohmedbakr.newsfeed.databinding.FragmentSingleNewspaperBinding
-import online.mohmedbakr.newsfeed.network.ParseRssFeedObject
-import online.mohmedbakr.newsfeed.source.FeedRepository
+import online.mohmedbakr.newsfeed.data.datasources.remote.ParseRssFeedObject
+import online.mohmedbakr.newsfeed.data.repository.FeedRepository
 import online.mohmedbakr.newsfeed.ui.MainActivity
 import online.mohmedbakr.newsfeed.ui.MainViewModel
 import online.mohmedbakr.newsfeed.ui.bookmark.BookmarkViewModel

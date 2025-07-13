@@ -1,4 +1,4 @@
-package online.mohmedbakr.newsfeed.source
+package online.mohmedbakr.newsfeed.data.repository
 
 import android.content.res.Resources
 import online.mohmedbakr.newsfeed.core.NewspaperCategories

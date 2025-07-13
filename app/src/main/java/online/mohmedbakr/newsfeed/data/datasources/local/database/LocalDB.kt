@@ -1,4 +1,4 @@
-package online.mohmedbakr.newsfeed.data.database
+package online.mohmedbakr.newsfeed.data.datasources.local.database
 
 import android.content.Context
 import androidx.room.Room
@@ -16,7 +16,7 @@ object LocalDB {
             context.applicationContext,
             ArticleDatabase::class.java, "articles.db"
         )
-            .fallbackToDestructiveMigration()
+            .fallbackToDestructiveMigration(false)
             .build().articleDao()
     }
 }

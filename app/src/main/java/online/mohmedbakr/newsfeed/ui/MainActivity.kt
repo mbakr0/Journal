@@ -14,7 +14,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import online.mohmedbakr.newsfeed.R
-import online.mohmedbakr.newsfeed.data.dataStore.filterPreferencesDataStore
+import online.mohmedbakr.newsfeed.data.datasources.local.filterPreferencesDataStore
 import online.mohmedbakr.newsfeed.databinding.ActivityMainBinding
 import kotlin.properties.Delegates
 

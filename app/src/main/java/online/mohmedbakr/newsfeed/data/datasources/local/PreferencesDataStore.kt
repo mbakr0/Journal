@@ -1,4 +1,4 @@
-package online.mohmedbakr.newsfeed.data.dataStore
+package online.mohmedbakr.newsfeed.data.datasources.local
 
 import android.content.Context
 import androidx.datastore.core.DataStore

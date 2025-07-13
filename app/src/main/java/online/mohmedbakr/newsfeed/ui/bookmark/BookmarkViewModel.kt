@@ -7,8 +7,8 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import online.mohmedbakr.newsfeed.core.ArticleDTO
 import online.mohmedbakr.newsfeed.core.ConstantsName
-import online.mohmedbakr.newsfeed.data.database.Article
-import online.mohmedbakr.newsfeed.source.ArticleLocalRepository
+import online.mohmedbakr.newsfeed.data.model.Article
+import online.mohmedbakr.newsfeed.data.repository.ArticleLocalRepository
 
 class BookmarkViewModel(private val articleLocalRepository: ArticleLocalRepository) : ViewModel() {
 

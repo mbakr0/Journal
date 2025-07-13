@@ -1,8 +1,8 @@
 package online.mohmedbakr.newsfeed
 
 import android.app.Application
-import online.mohmedbakr.newsfeed.data.database.LocalDB
-import online.mohmedbakr.newsfeed.source.ArticleLocalRepository
+import online.mohmedbakr.newsfeed.data.datasources.local.database.LocalDB
+import online.mohmedbakr.newsfeed.data.repository.ArticleLocalRepository
 
 class NewsfeedApplication : Application() {
 

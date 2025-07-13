@@ -1,4 +1,4 @@
-package online.mohmedbakr.newsfeed.source
+package online.mohmedbakr.newsfeed.data.repository
 
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -6,8 +6,8 @@ import kotlinx.coroutines.withContext
 import online.mohmedbakr.newsfeed.core.ArticleDTO
 import online.mohmedbakr.newsfeed.core.Response
 import online.mohmedbakr.newsfeed.core.RssLink
-import online.mohmedbakr.newsfeed.network.ParseRssFeed
-import online.mohmedbakr.newsfeed.network.RssElements
+import online.mohmedbakr.newsfeed.data.datasources.remote.ParseRssFeed
+import online.mohmedbakr.newsfeed.data.model.RssElements
 import java.net.URL
 
 class FeedRepository(

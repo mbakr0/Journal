@@ -1,7 +1,8 @@
-package online.mohmedbakr.newsfeed.data.database
+package online.mohmedbakr.newsfeed.data.datasources.local.database
 
 import androidx.room.*
 import kotlinx.coroutines.flow.Flow
+import online.mohmedbakr.newsfeed.data.model.Article
 
 /**
  * Data Access Object for the article table.

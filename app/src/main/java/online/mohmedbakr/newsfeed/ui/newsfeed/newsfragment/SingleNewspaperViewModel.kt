@@ -7,7 +7,7 @@ import kotlinx.coroutines.launch
 import online.mohmedbakr.newsfeed.core.ArticleDTO
 import online.mohmedbakr.newsfeed.core.Response
 import online.mohmedbakr.newsfeed.core.SingleLiveEvent
-import online.mohmedbakr.newsfeed.source.FeedRepository
+import online.mohmedbakr.newsfeed.data.repository.FeedRepository
 
 class SingleNewspaperViewModel(
     private val feedRepository: FeedRepository,

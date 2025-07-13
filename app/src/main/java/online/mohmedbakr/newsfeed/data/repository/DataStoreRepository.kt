@@ -1,10 +1,10 @@
-package online.mohmedbakr.newsfeed.source
+package online.mohmedbakr.newsfeed.data.repository
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import kotlinx.coroutines.flow.map
-import online.mohmedbakr.newsfeed.data.dataStore.PreferencesKey
-import online.mohmedbakr.newsfeed.data.dataStore.getStoredCategory
+import online.mohmedbakr.newsfeed.data.datasources.local.PreferencesKey
+import online.mohmedbakr.newsfeed.data.datasources.local.getStoredCategory
 
 fun getCategory(dataStore: DataStore<Preferences>) =
     getStoredCategory(dataStore).map { preferences ->

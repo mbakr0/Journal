@@ -2,7 +2,7 @@ package online.mohmedbakr.newsfeed.ui.bookmark
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import online.mohmedbakr.newsfeed.source.ArticleLocalRepository
+import online.mohmedbakr.newsfeed.data.repository.ArticleLocalRepository
 
 class BookmarkViewModelFactory(private val repository: ArticleLocalRepository) :
     ViewModelProvider.Factory {

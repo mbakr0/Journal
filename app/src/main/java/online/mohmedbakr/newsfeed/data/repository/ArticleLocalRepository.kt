@@ -1,12 +1,12 @@
-package online.mohmedbakr.newsfeed.source
+package online.mohmedbakr.newsfeed.data.repository
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.asLiveData
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import online.mohmedbakr.newsfeed.data.database.Article
-import online.mohmedbakr.newsfeed.data.database.ArticleDao
+import online.mohmedbakr.newsfeed.data.model.Article
+import online.mohmedbakr.newsfeed.data.datasources.local.database.ArticleDao
 
 class ArticleLocalRepository(
     private val articleDao: ArticleDao,
