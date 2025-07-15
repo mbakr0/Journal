@@ -1,6 +1,5 @@
 package online.mohmedbakr.newsfeed.data.datasources.remote
 
-
 import android.util.Log
 import online.mohmedbakr.newsfeed.core.ArticleDTO
 import online.mohmedbakr.newsfeed.core.ConstantsName
@@ -192,7 +191,6 @@ class ParseRssFeed {
 
         return data.replace("https://", "https://mada34.appspot.com/")
     }
-
     private fun translateDate(data: String): String {
         var translatedDate = data
         var englishDay: String
