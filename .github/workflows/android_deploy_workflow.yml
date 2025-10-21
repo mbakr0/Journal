@@ -3,7 +3,7 @@ name: Android Deploy to Play Store (Native Android)
 on:
   push:
     branches:
-      - main  # Trigger workflow on pushes to main branch
+      - master  # Trigger workflow on pushes to main branch
 
 jobs:
   build_and_deploy:
