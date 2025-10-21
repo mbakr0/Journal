@@ -1,0 +1,66 @@
+name: Android Deploy to Play Store (Native Android)
+
+on:push:branches:- main # Trigger the workflow whenever code is pushed to the 'main' branch
+
+jobs:
+build_and_deploy:
+runs-on: ubuntu-latest
+
+steps:
+  - name: Checkout Repository
+    uses: actions/checkout@v4
+
+  # This step sets up the required Java Development Kit (JDK) for Gradle to build your Kotlin/Java project.
+  - name: Setup Java
+    uses: actions/setup-java@v4
+    with:
+      distribution: 'temurin'
+      java-version: '17' # Java 17 is a common requirement for modern Android projects
+      cache: 'gradle'
+
+  # ----------------------------------------------------
+  # 1. SETUP SIGNING CREDENTIALS (using GitHub Secrets)
+  # ----------------------------------------------------
+  
+  - name: Create Keystore File from Secret
+    run: |
+      # Create the android/app directory if it doesn't exist
+      mkdir -p android/app
+      # Decode the KEYSTORE_BASE64 secret and write it to the expected path
+      echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > android/app/upload-keystore.jks
+    shell: bash
+    
+  - name: Create Key Properties File from Secret
+    run: |
+      # Decode the KEY_PROPERTIES_BASE64 secret and write it to the expected path
+      echo "${{ secrets.KEY_PROPERTIES_BASE64 }}" | base64 --decode > android/key.properties
+    shell: bash
+
+  # ----------------------------------------------------
+  # 2. BUILD THE RELEASE AAB (Android App Bundle)
+  # ----------------------------------------------------
+
+  - name: Grant Execute Permission for Gradle Wrapper
+    run: chmod +x android/gradlew
+
+  - name: Build Android App Bundle (AAB)
+    run: |
+      # The key.properties file tells Gradle how to sign the AAB
+      ./android/gradlew bundleRelease --no-daemon
+    shell: bash
+
+  # ----------------------------------------------------
+  # 3. DEPLOY TO GOOGLE PLAY STORE
+  # ----------------------------------------------------
+
+  - name: Deploy to Play Store
+    uses: r0adkll/upload-google-play@v1
+    with:
+      # This uses the raw JSON secret to authenticate with Google Play
+      serviceAccountJson: ${{ secrets.PLAY_STORE_SA_KEY }}
+      # Path to the generated App Bundle
+      packageName: online.mohmedbakr.newsfeed # Updated with your package name
+      # Track to deploy to (e.g., internal, alpha, beta, production)
+      track: internal 
+      # Finds the generated AAB file in the output directory
+      releaseFile: android/app/build/outputs/bundle/release/app-release.aab
