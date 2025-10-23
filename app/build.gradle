@@ -36,16 +36,18 @@ android {
         coreLibraryDesugaringEnabled true
     }
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_17
+
     }
     buildFeatures {
         viewBinding true
         dataBinding true
     }
 }
-
+kotlin {
+    jvmToolchain(17)
+}
 dependencies {
-    ksp "com.google.devtools.ksp:symbol-processing-api:2.0.21-1.0.27"
+    ksp "com.google.devtools.ksp:symbol-processing-api:2.2.20-1.0.28"
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.5'
     implementation 'androidx.appcompat:appcompat:1.7.1'
     implementation 'com.google.android.material:material:1.13.0'
@@ -66,10 +68,10 @@ dependencies {
     kapt "androidx.lifecycle:lifecycle-common-java8:2.9.4"
 
     //  Room For database
-    implementation("androidx.room:room-runtime:2.8.2")
-    implementation("androidx.room:room-ktx:2.8.2")
-    ksp("androidx.room:room-compiler:2.8.2")
-    annotationProcessor ("androidx.room:room-compiler:2.8.2")
+    implementation("androidx.room:room-runtime:2.8.3")
+    implementation("androidx.room:room-ktx:2.8.3")
+    ksp("androidx.room:room-compiler:2.8.3")
+
 
     //  Preferences DataStore
     implementation("androidx.datastore:datastore-preferences:1.1.7")
