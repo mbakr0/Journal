@@ -34,3 +34,15 @@
 -dontwarn  org.osgi.framework.BundleContext
 -dontwarn  org.osgi.framework.FrameworkUtil
 -dontwarn  org.osgi.framework.ServiceReference
+
+
+-keep class androidx.room.** { *; }
+-keep @androidx.room.Dao class * { *; }
+
+# Keep Retrofit/Gson models
+-keep class com.google.gson.** { *; }
+-keepattributes Signature
+-keepattributes *Annotation*
+
+# Keep Kotlin metadata
+-keep class kotlin.Metadata { *; }
