@@ -50,7 +50,7 @@ android {
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.debug
-            signingConfig signingConfigs.release //
+            signingConfig = signingConfigs.release //
         }
     }
     compileOptions {
