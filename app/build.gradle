@@ -37,7 +37,7 @@ android {
     signingConfigs {
         release {
             // Point the CI build to the restored JKS file path
-            storeFile file('app/upload-keystore.jks')
+            storeFile rootProject.file('app/upload-keystore.jks')
             storePassword keystoreProperties['storePassword']
             keyAlias keystoreProperties['keyAlias']
             keyPassword keystoreProperties['keyPassword']
