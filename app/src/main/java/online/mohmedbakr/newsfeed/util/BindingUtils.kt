@@ -12,7 +12,9 @@ import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
-import java.util.*
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
+import java.util.Date
 
 @BindingAdapter("android:setTitle")
 fun TextView.setTitle(title: String) {
@@ -81,10 +83,10 @@ fun setFadeVisible(view: View, visible: Boolean = true) {
     } else {
         view.animate().cancel()
         if (visible) {
-            if (view.visibility == View.GONE)
+            if (view.isGone)
                 view.fadeIn()
         } else {
-            if (view.visibility == View.VISIBLE)
+            if (view.isVisible)
                 view.fadeOut()
         }
     }
