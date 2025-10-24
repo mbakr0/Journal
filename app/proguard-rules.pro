@@ -35,6 +35,9 @@
 -dontwarn  org.osgi.framework.FrameworkUtil
 -dontwarn  org.osgi.framework.ServiceReference
 
+-dontwarn org.osgi.**
+-dontwarn aQute.bnd.annotation.**
+-dontwarn edu.umd.cs.findbugs.annotations.**
 
 -keep class androidx.room.** { *; }
 -keep @androidx.room.Dao class * { *; }
