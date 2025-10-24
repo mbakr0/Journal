@@ -7,6 +7,19 @@ plugins {
 
 }
 
+def keystorePropertiesFile = rootProject.file("key.properties")
+def keystoreProperties = new Properties()
+
+// Load the properties file ONLY if it exists (which it does in CI after restoration)
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+} else {
+    // Optionally print a warning if running locally without the key file
+    println "Warning: key.properties not found. Using local debug key."
+}
+
+
+
 android {
     namespace 'online.mohmedbakr.newsfeed'
     compileSdk 36
@@ -21,6 +34,15 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
+    signingConfigs {
+        release {
+            // Point the CI build to the restored JKS file path
+            storeFile file('app/upload-keystore.jks')
+            storePassword keystoreProperties['storePassword']
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+        }
+    }
 
     buildTypes {
         release {
@@ -28,6 +50,7 @@ android {
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.debug
+            signingConfig signingConfigs.release //
         }
     }
     compileOptions {
@@ -42,6 +65,10 @@ android {
         viewBinding true
         dataBinding true
     }
+
+
+
+
 }
 kotlin {
     jvmToolchain(17)
