@@ -12,13 +12,13 @@ class RssLink {
         private const val ALHADTH_BASE_URL = "https://alhadth-online.com/rss.php?cat="
         private const val ALHADTH_ARTICLES_BASE_URL = "https://alhadth-online.com/arts_rss.php/"
 
-        private const val RASSD_BASE_URL = "https://rassd.com/feed"
+        private const val RASSD_BASE_URL = "https://rassd.net/feed"
 
         private const val ALJAZEERA_BASE_URL =
             "https://1-a1072.azureedge.net/aljazeerarss/a7c186be-1baa-4bd4-9d80-a84db769f779/73d0e1b4-532f-45ef-b135-bfdff8b8cab9"
         private const val ARABIC_BBC_BASE_URL = "https://feeds.bbci.co.uk/arabic/rss.xml"
 
-        private const val MADA_MASR_BASE_URL = "https://mada34.appspot.com/www.madamasr.com/ar/feed/"
+        private const val MADA_MASR_BASE_URL = "https://www.madamasr.com/feed/"
     }
 
     fun getMasrawyLinksByCategories(categories: ArrayList<String>): ArrayList<URL> {

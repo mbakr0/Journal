@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Journal</string>
+    <string name="info">Info</string>
     <string name="title_bookmark">Bookmark</string>
     <string name="fragment_details">Article Page</string>
     <string name="remove_article">Remove Article</string>

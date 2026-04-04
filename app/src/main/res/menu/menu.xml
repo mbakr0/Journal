@@ -3,6 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:id="@+id/info"
+        android:icon="@android:drawable/ic_menu_info_details"
+        android:title="@string/info"
+        app:showAsAction="ifRoom" />
+    <item
         android:id="@+id/navigation_bookmark"
         android:icon="@drawable/ic_bookmark_state"
         android:title="@string/title_bookmark"

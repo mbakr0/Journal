@@ -39,6 +39,7 @@ import online.mohmedbakr.newsfeed.databinding.FragmentNewsfeedBinding
 import online.mohmedbakr.newsfeed.data.repository.CategoriesRepository
 import online.mohmedbakr.newsfeed.ui.MainActivity
 import online.mohmedbakr.newsfeed.ui.newsfeed.newsfragment.SingleNewspaperViewpagerAdapter
+import kotlin.math.log
 
 
 class NewsfeedFragment : Fragment() {
@@ -97,6 +98,7 @@ class NewsfeedFragment : Fragment() {
         pager.adapter = adapter
 
         TabLayoutMediator(tabLayout, pager) { tab, position ->
+
             tab.text = ConstantsName.newspaperNames[position]
         }.attach()
 
@@ -133,6 +135,12 @@ class NewsfeedFragment : Fragment() {
                     R.id.navigation_bookmark -> {
                         val navController = view.findNavController()
                         navController.navigate(NewsfeedFragmentDirections.actionNavigationNewsfeedToNavigationBookmark())
+                    }
+                    R.id.info -> {
+                        val navController = view.findNavController()
+                        navController.navigate(
+                            NewsfeedFragmentDirections.actionNavigationNewsfeedToDeveloperInfoFragment()
+                        )
                     }
 
                     R.id.filter -> {

@@ -72,6 +72,7 @@ class BookmarkFragment : Fragment() {
             override fun onPrepareMenu(menu: Menu) {
                 menu.removeItem(R.id.navigation_bookmark)
                 menu.removeItem(R.id.filter)
+                menu.removeItem(R.id.info)
             }
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {

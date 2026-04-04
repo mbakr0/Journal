@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="JsonSchemaMappingsProjectConfiguration">
+    <state>
+      <map>
+        <entry key="Choice Task Configuration">
+          <value>
+            <SchemaInfo>
+              <option name="name" value="Choice Task Configuration" />
+              <option name="relativePathToSchema" value="jar://$APPLICATION_PLUGINS_DIR$/JetBrainsAcademy/lib/JetBrainsAcademy-2025.11-2025.2-1050.jar!/yaml/choice-task-schema.json" />
+              <option name="schemaVersion" value="JSON Schema 7" />
+              <option name="applicationDefined" value="true" />
+              <option name="patterns">
+                <list>
+                  <Item>
+                    <option name="path" value=".github/workflows/android_deploy_workflow.yml" />
+                  </Item>
+                </list>
+              </option>
+            </SchemaInfo>
+          </value>
+        </entry>
+      </map>
+    </state>
+  </component>
+</project>
