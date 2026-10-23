@@ -3,20 +3,30 @@ package online.mohmedbakr.newsfeed.data.datasources.local.database
 import android.content.Context
 import androidx.room.Room
 
-
 /**
- * Singleton class that is used to create a reminder db
+ * Provides the application's local article database.
+ *
+ * Room databases are expensive to create, so keep a single instance for
+ * the lifetime of the application process.
  */
 object LocalDB {
-    /**
-     * static method that creates a reminder class and returns the DAO of the reminder
-     */
+    @Volatile
+    private var database: ArticleDatabase? = null
+
     fun createArticleDao(context: Context): ArticleDao {
-        return Room.databaseBuilder(
-            context.applicationContext,
-            ArticleDatabase::class.java, "articles.db"
-        )
-            .fallbackToDestructiveMigration(false)
-            .build().articleDao()
+        return getDatabase(context).articleDao()
+    }
+
+    private fun getDatabase(context: Context): ArticleDatabase {
+        return database ?: synchronized(this) {
+            database ?: Room.databaseBuilder(
+                context.applicationContext,
+                ArticleDatabase::class.java,
+                "articles.db"
+            )
+                .fallbackToDestructiveMigration(false)
+                .build()
+                .also { database = it }
+        }
     }
 }
