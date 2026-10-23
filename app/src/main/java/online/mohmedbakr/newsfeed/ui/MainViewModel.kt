@@ -2,19 +2,19 @@ package online.mohmedbakr.newsfeed.ui
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import online.mohmedbakr.newsfeed.data.repository.getCategory
 
 class MainViewModel(dataStore: DataStore<Preferences>) : ViewModel() {
-    val networkState: MutableLiveData<Boolean> by lazy {
-        MutableLiveData()
-    }
+    private val _networkState = MutableStateFlow(false)
+    val networkState: StateFlow<Boolean> = _networkState.asStateFlow()
 
     val categoryList = getCategory(dataStore)
 
-
     fun setNetworkState(state: Boolean) {
-        networkState.postValue(state)
+        _networkState.value = state
     }
 }
