@@ -38,9 +38,6 @@ import online.mohmedbakr.newsfeed.databinding.ChipGroupBinding
 import online.mohmedbakr.newsfeed.databinding.FragmentNewsfeedBinding
 import online.mohmedbakr.newsfeed.data.repository.CategoriesRepository
 import online.mohmedbakr.newsfeed.ui.MainActivity
-import online.mohmedbakr.newsfeed.ui.newsfeed.newsfragment.SingleNewspaperViewpagerAdapter
-import kotlin.math.log
-
 
 class NewsfeedFragment : Fragment() {
 
@@ -62,7 +59,6 @@ class NewsfeedFragment : Fragment() {
     private lateinit var youm7ChipGroup: ChipGroup
     private lateinit var alhadathChipGroup: ChipGroup
 
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -76,20 +72,15 @@ class NewsfeedFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         val tabLayout = binding.tabLayout
         pager = binding.singleNewspaper
         createChipGroupFilter()
         filter = AlertDialog.Builder(activity)
             .setView(bindingChipGroup.root)
-            .setOnDismissListener {
-                removePreviousAlertLayout()
-            }
+            .setOnDismissListener { removePreviousAlertLayout() }
             .setPositiveButton("Save") { _, _ ->
                 when (pager.currentItem) {
-                    0, 4, 5, 7 -> {
-                        serializeFilter(pager.currentItem)
-                    }
+                    0, 4, 5, 7 -> serializeFilter(pager.currentItem)
                 }
             }
             .create()
@@ -98,7 +89,6 @@ class NewsfeedFragment : Fragment() {
         pager.adapter = adapter
 
         TabLayoutMediator(tabLayout, pager) { tab, position ->
-
             tab.text = ConstantsName.newspaperNames[position]
         }.attach()
 
@@ -107,45 +97,33 @@ class NewsfeedFragment : Fragment() {
                 pager.currentItem = tab.position
             }
 
-            override fun onTabUnselected(tab: TabLayout.Tab) {}
-            override fun onTabReselected(tab: TabLayout.Tab) {}
+            override fun onTabUnselected(tab: TabLayout.Tab) = Unit
+            override fun onTabReselected(tab: TabLayout.Tab) = Unit
         })
 
         menuHost = requireActivity()
         createMenu(view)
-
     }
-
 
     private fun createMenu(view: View) {
         menuHost.addMenuProvider(object : MenuProvider {
-
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
                 menuInflater.inflate(R.menu.menu, menu)
-
             }
 
             override fun onPrepareMenu(menu: Menu) {
                 menu.removeItem(R.id.deleteAllArticle)
-
             }
 
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 when (menuItem.itemId) {
-                    R.id.navigation_bookmark -> {
-                        val navController = view.findNavController()
-                        navController.navigate(NewsfeedFragmentDirections.actionNavigationNewsfeedToNavigationBookmark())
-                    }
-                    R.id.info -> {
-                        val navController = view.findNavController()
-                        navController.navigate(
-                            NewsfeedFragmentDirections.actionNavigationNewsfeedToDeveloperInfoFragment()
-                        )
-                    }
-
-                    R.id.filter -> {
-                        showFilterDialog(pager.currentItem)
-                    }
+                    R.id.navigation_bookmark -> view.findNavController().navigate(
+                        NewsfeedFragmentDirections.actionNavigationNewsfeedToNavigationBookmark()
+                    )
+                    R.id.info -> view.findNavController().navigate(
+                        NewsfeedFragmentDirections.actionNavigationNewsfeedToDeveloperInfoFragment()
+                    )
+                    R.id.filter -> showFilterDialog(pager.currentItem)
                 }
                 return true
             }
@@ -155,34 +133,19 @@ class NewsfeedFragment : Fragment() {
     private fun serializeFilter(currentNewspaper: Int) {
         var filterString = ""
         when (currentNewspaper) {
-            0 -> {
-                masrawyChipGroup.forEach { (_, chipGroup) ->
-                    chipGroup.checkedChipIds.forEach { chipID ->
-                        filterString += chipGroup.findViewById<Chip>(chipID).tag.toString() + "@"
-                    }
-
+            0 -> masrawyChipGroup.forEach { (_, chipGroup) ->
+                chipGroup.checkedChipIds.forEach { chipID ->
+                    filterString += chipGroup.findViewById<Chip>(chipID).tag.toString() + "@"
                 }
             }
-
-            4 -> {
-                alarabiyaChipGroup.checkedChipIds.forEach { chipID ->
-                    filterString += alarabiyaChipGroup.findViewById<Chip>(chipID).tag.toString() + "@"
-                }
+            4 -> alarabiyaChipGroup.checkedChipIds.forEach { chipID ->
+                filterString += alarabiyaChipGroup.findViewById<Chip>(chipID).tag.toString() + "@"
             }
-
-            5 -> {
-                alhadathChipGroup.checkedChipIds.forEach { chipID ->
-                    filterString += alhadathChipGroup.findViewById<Chip>(chipID).tag.toString() + "@"
-
-                }
+            5 -> alhadathChipGroup.checkedChipIds.forEach { chipID ->
+                filterString += alhadathChipGroup.findViewById<Chip>(chipID).tag.toString() + "@"
             }
-
-            7 -> {
-                youm7ChipGroup.checkedChipIds.forEach { chipID ->
-                    filterString += youm7ChipGroup.findViewById<Chip>(chipID).tag.toString() + "@"
-
-
-                }
+            7 -> youm7ChipGroup.checkedChipIds.forEach { chipID ->
+                filterString += youm7ChipGroup.findViewById<Chip>(chipID).tag.toString() + "@"
             }
         }
         saveCheckedFilter(filterString, currentNewspaper)
@@ -200,47 +163,35 @@ class NewsfeedFragment : Fragment() {
                     }
                 }
             }
-            withContext(Dispatchers.Main) {
-                (activity as MainActivity).viewModel.apply {
-                    setNetworkState(networkState.value!!)
-                }
+            (activity as? MainActivity)?.viewModel?.let { viewModel ->
+                viewModel.setNetworkState(viewModel.networkState.value)
             }
-
-
         }
-
     }
 
     private fun createChipGroupFilter() {
         lifecycleScope.launch {
-            withContext(Dispatchers.IO) {
+            withContext(Dispatchers.Default) {
                 category = CategoriesRepository(resources)
                 newspaperName = TextView(context)
                 val layoutParams = LinearLayout.LayoutParams(
                     LayoutParams.WRAP_CONTENT,
                     LayoutParams.WRAP_CONTENT
                 )
-
                 layoutParams.gravity = Gravity.CENTER
                 newspaperName.textSize = 25f
                 newspaperName.layoutParams = layoutParams
-
                 createMasrawyChipGroup()
                 createAlarabiyaChipGroup()
                 createYoum7ChipGroup()
                 createAlhadathChipGroup()
-
             }
         }
     }
 
     private fun createAlarabiyaChipGroup() {
         alarabiyaChipGroup = ChipGroup(context)
-        val layoutParams = LayoutParams(
-            LayoutParams.WRAP_CONTENT,
-            LayoutParams.WRAP_CONTENT
-        )
-        alarabiyaChipGroup.layoutParams = layoutParams
+        alarabiyaChipGroup.layoutParams = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
         var count = 0
         category.getAlarabiya().forEach { (filterName, urlParam) ->
             val chipView = View.inflate(context, R.layout.chip, null) as Chip
@@ -249,26 +200,19 @@ class NewsfeedFragment : Fragment() {
             chipView.id = count++
             alarabiyaChipGroup.addView(chipView)
         }
-
-
     }
-
 
     private fun createMasrawyChipGroup() {
         masrawyChipGroup = HashMap()
         var count = 0
         category.getMasrawy().forEach { (categoryName, filterMap) ->
-            val layoutParams = LayoutParams(
-                LayoutParams.WRAP_CONTENT,
-                LayoutParams.WRAP_CONTENT
-            )
+            val layoutParams = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
             val chipGroup = ChipGroup(context)
             val textView = TextView(context)
             textView.text = categoryName
             textView.textSize = 20f
             textView.layoutParams = layoutParams
             chipGroup.layoutParams = layoutParams
-
             filterMap.forEach { (filterName, urlParam) ->
                 val chipView = View.inflate(context, R.layout.chip, null) as Chip
                 chipView.text = filterName
@@ -282,12 +226,7 @@ class NewsfeedFragment : Fragment() {
 
     private fun createAlhadathChipGroup() {
         alhadathChipGroup = ChipGroup(context)
-        val layoutParams = LayoutParams(
-            LayoutParams.WRAP_CONTENT,
-            LayoutParams.WRAP_CONTENT
-        )
-
-        alhadathChipGroup.layoutParams = layoutParams
+        alhadathChipGroup.layoutParams = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
         var count = 0
         category.getAlhadath().forEach { (filterName, urlParam) ->
             val chipView = View.inflate(context, R.layout.chip, null) as Chip
@@ -296,20 +235,13 @@ class NewsfeedFragment : Fragment() {
             chipView.id = count++
             alhadathChipGroup.addView(chipView)
         }
-
     }
 
     private fun createYoum7ChipGroup() {
         youm7ChipGroup = ChipGroup(context)
-        val layoutParams = LayoutParams(
-            LayoutParams.WRAP_CONTENT,
-            LayoutParams.WRAP_CONTENT
-        )
-
-        youm7ChipGroup.layoutParams = layoutParams
+        youm7ChipGroup.layoutParams = LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT)
         var count = 0
         category.getYoum7().forEach { (filterName, urlParam) ->
-
             val chipView = View.inflate(context, R.layout.chip, null) as Chip
             chipView.text = filterName
             chipView.tag = urlParam
@@ -321,37 +253,14 @@ class NewsfeedFragment : Fragment() {
     private fun showFilterDialog(currentItem: Int) {
         val name = ConstantsName.newspaperNames[currentItem]
         when (currentItem) {
-            0 -> {
-                addNewspaperName(name)
-                showMasrawyDialog()
-            }
-
-            4 -> {
-                addNewspaperName(name)
-                showAlarabiyaDialog()
-            }
-
-            5 -> {
-                addNewspaperName(name)
-                showAlhadathDialog()
-            }
-
-            7 -> {
-                addNewspaperName(name)
-                showYoum7Dialog()
-            }
-
-            else -> {
-                Snackbar.make(
-                    requireContext(),
-                    binding.root,
-                    "$name  ليس لديه اقسام  ",
-                    Snackbar.LENGTH_SHORT
-                ).show()
-            }
+            0 -> { addNewspaperName(name); showMasrawyDialog() }
+            4 -> { addNewspaperName(name); showAlarabiyaDialog() }
+            5 -> { addNewspaperName(name); showAlhadathDialog() }
+            7 -> { addNewspaperName(name); showYoum7Dialog() }
+            else -> Snackbar.make(
+                requireContext(), binding.root, "$name  ليس لديه اقسام  ", Snackbar.LENGTH_SHORT
+            ).show()
         }
-
-
     }
 
     private fun addNewspaperName(name: String) {
@@ -369,7 +278,6 @@ class NewsfeedFragment : Fragment() {
         filter.show()
     }
 
-
     private fun showAlhadathDialog() {
         bindingChipGroup.chipGroupLayout.addView(alhadathChipGroup)
         filter.show()
@@ -380,13 +288,8 @@ class NewsfeedFragment : Fragment() {
             bindingChipGroup.chipGroupLayout.addView(textView)
             bindingChipGroup.chipGroupLayout.addView(chipGroup)
             val divider = MaterialDivider(requireContext())
-            val layoutParams = LayoutParams(
-                LayoutParams.MATCH_PARENT,
-                5
-            )
-            divider.layoutParams = layoutParams
+            divider.layoutParams = LayoutParams(LayoutParams.MATCH_PARENT, 5)
             bindingChipGroup.chipGroupLayout.addView(divider)
-
         }
         filter.show()
     }
@@ -398,8 +301,6 @@ class NewsfeedFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+        _bindingChipGroup = null
     }
-
-
 }
-
