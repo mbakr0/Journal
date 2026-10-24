@@ -46,6 +46,7 @@
             android:id="@+id/noDataTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="24dp"
             android:fadeVisible="@{viewModel.showNoData.booleanValue()}"
             android:gravity="center"
             android:text="@string/no_data"
@@ -55,7 +56,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/bookmark_header" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/saved_articles"
