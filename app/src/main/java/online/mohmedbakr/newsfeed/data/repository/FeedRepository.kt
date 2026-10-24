@@ -10,122 +10,84 @@ import online.mohmedbakr.newsfeed.data.datasources.remote.ParseRssFeed
 import online.mohmedbakr.newsfeed.data.model.RssElements
 import java.net.URL
 
+/**
+ * Coordinates RSS source URLs and parsing. All network/parser work runs on [ioDispatcher].
+ *
+ * The parser is stateful for backwards compatibility, so calls are serialized by this
+ * repository instance rather than being launched concurrently.
+ */
 class FeedRepository(
     private val parseRssFeed: ParseRssFeed,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) {
     private val rssLink = RssLink()
-    private var newspaperName: String = ""
-    private lateinit var url: URL
-    private lateinit var urlList: ArrayList<URL>
 
-    suspend fun getMasrawyFeed(categories: ArrayList<String> = arrayListOf()): Response<ArrayList<ArticleDTO>> {
-        return withContext(ioDispatcher) {
-            parseRssFeed.clearArticleList()
-            if (categories.isEmpty())
-                categories.add("25")
-            urlList = rssLink.getMasrawyLinksByCategories(categories)
-            newspaperName = RssElements.MASRAWY
-            urlList.forEach {
-                parseRssFeed.setNameAndUrl(it, newspaperName)
-                if (parseRssFeed.response is Response.Error)
-                    return@withContext parseRssFeed.response
-
-            }
-            return@withContext parseRssFeed.response
-        }
-
-    }
+    suspend fun getMasrawyFeed(
+        categories: ArrayList<String> = arrayListOf(),
+    ): Response<ArrayList<ArticleDTO>> = fetchFeeds(
+        urls = rssLink.getMasrawyLinksByCategories(categories.ifEmpty { arrayListOf("25") }),
+        source = RssElements.MASRAWY,
+    )
 
     suspend fun getYoum7Feed(
         categories: ArrayList<String> = arrayListOf(),
-    ): Response<ArrayList<ArticleDTO>> {
-        return withContext(ioDispatcher) {
-            parseRssFeed.clearArticleList()
-            if (categories.isEmpty())
-                categories.add("65")
-            urlList = rssLink.getYoum7LinksByCategories(categories)
-            newspaperName = RssElements.YOUM7
+    ): Response<ArrayList<ArticleDTO>> = fetchFeeds(
+        urls = rssLink.getYoum7LinksByCategories(categories.ifEmpty { arrayListOf("65") }),
+        source = RssElements.YOUM7,
+    )
 
-            urlList.forEach {
-                parseRssFeed.setNameAndUrl(it, newspaperName)
-                if (parseRssFeed.response is Response.Error)
-                    return@withContext parseRssFeed.response
+    suspend fun getRassdFeed(): Response<ArrayList<ArticleDTO>> =
+        fetchFeed(rssLink.getRassdLink(), RssElements.RASSD)
+
+    suspend fun getArabicBBCFeed(): Response<ArrayList<ArticleDTO>> =
+        fetchFeed(rssLink.getArabicBBCLink(), RssElements.ARABIC_BBC)
+
+    suspend fun getAlarabiyaFeed(
+        categories: ArrayList<String> = arrayListOf(),
+    ): Response<ArrayList<ArticleDTO>> = fetchFeeds(
+        urls = rssLink.getAlarabiyaLinksByCategories(categories.ifEmpty { arrayListOf(".xml") }),
+        source = RssElements.ALARABIYA,
+    )
+
+    suspend fun getAlhadathFeed(
+        categories: ArrayList<String> = arrayListOf(),
+    ): Response<ArrayList<ArticleDTO>> = fetchFeeds(
+        urls = rssLink.getAlhadathLinksByCategories(categories.ifEmpty { arrayListOf("3") }),
+        source = RssElements.ALHADATH,
+    )
+
+    suspend fun getAljazeeraFeed(): Response<ArrayList<ArticleDTO>> =
+        fetchFeed(rssLink.getAljazeeraLink(), RssElements.ALJAZEERA)
+
+    suspend fun getMadaMasr(): Response<ArrayList<ArticleDTO>> =
+        fetchFeed(rssLink.getMadaMasr(), RssElements.MADAMASR)
+
+    private suspend fun fetchFeed(
+        url: URL,
+        source: String,
+    ): Response<ArrayList<ArticleDTO>> = fetchFeeds(listOf(url), source)
+
+    private suspend fun fetchFeeds(
+        urls: List<URL>,
+        source: String,
+    ): Response<ArrayList<ArticleDTO>> = withContext(ioDispatcher) {
+        parseRssFeed.clearArticleList()
+
+        if (urls.isEmpty()) {
+            return@withContext Response.Success(arrayListOf())
+        }
+
+        for (url in urls) {
+            parseRssFeed.setNameAndUrl(url, source)
+            when (val result = parseRssFeed.response) {
+                is Response.Error -> return@withContext result
+                is Response.Success -> Unit
             }
-            return@withContext parseRssFeed.response
+        }
+
+        when (val result = parseRssFeed.response) {
+            is Response.Success -> Response.Success(ArrayList(result.data.distinctBy { it.link.trim() }))
+            is Response.Error -> result
         }
     }
-
-    suspend fun getRassdFeed(): Response<ArrayList<ArticleDTO>> {
-        return withContext(ioDispatcher) {
-            parseRssFeed.clearArticleList()
-            url = rssLink.getRassdLink()
-            newspaperName = RssElements.RASSD
-            parseRssFeed.setNameAndUrl(url, newspaperName)
-            return@withContext parseRssFeed.response
-        }
-    }
-
-    suspend fun getArabicBBCFeed(): Response<ArrayList<ArticleDTO>> {
-        return withContext(ioDispatcher) {
-            parseRssFeed.clearArticleList()
-            url = rssLink.getArabicBBCLink()
-            newspaperName = RssElements.ARABIC_BBC
-            parseRssFeed.setNameAndUrl(url, newspaperName)
-            return@withContext parseRssFeed.response
-        }
-    }
-
-    suspend fun getAlarabiyaFeed(categories: ArrayList<String> = arrayListOf()): Response<ArrayList<ArticleDTO>> {
-        return withContext(ioDispatcher) {
-            parseRssFeed.clearArticleList()
-            if (categories.isEmpty())
-                categories.add(".xml")
-            urlList = rssLink.getAlarabiyaLinksByCategories(categories)
-            newspaperName = RssElements.ALARABIYA
-            urlList.forEach { url: URL ->
-                parseRssFeed.setNameAndUrl(url, newspaperName)
-                if (parseRssFeed.response is Response.Error)
-                    return@withContext parseRssFeed.response
-            }
-            return@withContext parseRssFeed.response
-        }
-    }
-
-    suspend fun getAlhadathFeed(categories: ArrayList<String> = arrayListOf()): Response<ArrayList<ArticleDTO>> {
-        return withContext(ioDispatcher) {
-            parseRssFeed.clearArticleList()
-            if (categories.isEmpty())
-                categories.add("3")
-            urlList = rssLink.getAlhadathLinksByCategories(categories)
-            newspaperName = RssElements.ALHADATH
-            urlList.forEach {
-                parseRssFeed.setNameAndUrl(it, newspaperName)
-                if (parseRssFeed.response is Response.Error)
-                    return@withContext parseRssFeed.response
-            }
-            return@withContext parseRssFeed.response
-        }
-    }
-
-    suspend fun getAljazeeraFeed(): Response<ArrayList<ArticleDTO>> {
-        return withContext(ioDispatcher) {
-            parseRssFeed.clearArticleList()
-            url = rssLink.getAljazeeraLink()
-            newspaperName = RssElements.ALJAZEERA
-            parseRssFeed.setNameAndUrl(url, newspaperName)
-            return@withContext parseRssFeed.response
-        }
-    }
-
-    suspend fun getMadaMasr(): Response<ArrayList<ArticleDTO>> {
-        return withContext(ioDispatcher) {
-            parseRssFeed.clearArticleList()
-            url = rssLink.getMadaMasr()
-            newspaperName = RssElements.MADAMASR
-            parseRssFeed.setNameAndUrl(url, newspaperName)
-            return@withContext parseRssFeed.response
-        }
-    }
-
 }
