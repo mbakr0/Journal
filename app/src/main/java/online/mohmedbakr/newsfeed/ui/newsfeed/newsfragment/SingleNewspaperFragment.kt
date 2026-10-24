@@ -100,11 +100,21 @@ class SingleNewspaperFragment : Fragment() {
         }
         binding.feedRecyclerView.adapter = adapter
 
-        binding.swipeToRefresh.setOnRefreshListener {
-            (activity as MainActivity).viewModel.apply {
-                setNetworkState(networkState.value)
+        binding.noInternet.retryButton.setOnClickListener {
+            if (mainViewModel.networkState.value) {
+                getNews()
+            } else {
+                Toast.makeText(requireContext(), R.string.no_internet_connection, Toast.LENGTH_SHORT).show()
             }
-            binding.swipeToRefresh.isRefreshing = false
+        }
+
+        binding.swipeToRefresh.setOnRefreshListener {
+            if (mainViewModel.networkState.value) {
+                getNews()
+            } else {
+                binding.swipeToRefresh.isRefreshing = false
+                viewModel.error.value = Response.NO_INTERNET_CONNECTION
+            }
         }
 
         lifecycleScope.launch {
@@ -124,6 +134,7 @@ class SingleNewspaperFragment : Fragment() {
 
 
         viewModel.articleList.observe(viewLifecycleOwner) { list ->
+            binding.swipeToRefresh.isRefreshing = false
             binding.shimmerViewContainer.stopShimmer()
             binding.shimmerViewContainer.visibility = View.GONE
             binding.noInternet.noInternet.visibility = View.GONE
@@ -135,6 +146,7 @@ class SingleNewspaperFragment : Fragment() {
 
 
         viewModel.error.observe(viewLifecycleOwner) {
+            binding.swipeToRefresh.isRefreshing = false
             if (viewModel.articleList.value == null || viewModel.articleList.value!!.isEmpty()) {
                 binding.shimmerViewContainer.stopShimmer()
                 binding.shimmerViewContainer.visibility = View.GONE
