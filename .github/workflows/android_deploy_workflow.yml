@@ -53,7 +53,7 @@ jobs:
       # 5. DEPLOY TO GOOGLE PLAY STORE
       # ----------------------------------------------------
       - name: Upload to Google Play
-        uses: r0adkll/upload-google-play@v1
+        uses: r0adkll/upload-google-play@v1.1.5
         with:
           serviceAccountJsonPlainText: ${{ secrets.PLAY_STORE_SA_KEY }}
           packageName: online.mohmedbakr.newsfeed  # <-- Replace with your actual package name
