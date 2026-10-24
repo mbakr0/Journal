@@ -8,16 +8,12 @@ import online.mohmedbakr.newsfeed.data.model.RssElements
 import java.io.InputStream
 import java.net.HttpURLConnection
 import java.net.URL
-import javax.xml.stream.XMLEventReader
 import javax.xml.stream.XMLInputFactory
 import javax.xml.stream.events.StartElement
-import javax.xml.stream.events.XMLEvent
 
 /**
- * Downloads and parses one RSS feed at a time.
- *
- * The public API is kept compatible with FeedRepository. Each item is parsed into a
- * fresh DTO so malformed or incomplete items cannot leak state into the next item.
+ * Downloads and parses RSS/Atom feeds. The API is kept compatible with FeedRepository.
+ * A fresh DTO is created for every item to prevent fields leaking between articles.
  */
 class ParseRssFeed {
     private val articleList = arrayListOf<ArticleDTO>()
@@ -34,11 +30,13 @@ class ParseRssFeed {
     fun setNameAndUrl(url: URL, newspaperName: String) {
         this.newspaperName = newspaperName
         configureTags(newspaperName)
-        articleList.clear()
 
+        // Do not clear here: one repository call may combine several category feeds.
         try {
-            val parsed = downloadAndParse(url)
-            articleList.addAll(parsed.distinctBy { it.link.trim() })
+            articleList.addAll(downloadAndParse(url))
+            val unique = articleList.distinctBy { it.link.trim() }
+            articleList.clear()
+            articleList.addAll(unique)
             response = Response.Success(articleList)
         } catch (exception: Exception) {
             Log.w(TAG, "Unable to parse RSS feed: $url", exception)
@@ -57,13 +55,16 @@ class ParseRssFeed {
     }
 
     private fun downloadAndParse(url: URL): List<ArticleDTO> {
-        val connection = (url.openConnection() as? HttpURLConnection)
+        val connection = url.openConnection() as? HttpURLConnection
             ?: throw IllegalArgumentException("Unsupported feed URL: $url")
 
         connection.connectTimeout = CONNECT_TIMEOUT_MS
         connection.readTimeout = READ_TIMEOUT_MS
         connection.requestMethod = "GET"
-        connection.setRequestProperty("Accept", "application/rss+xml, application/atom+xml, application/xml, text/xml")
+        connection.setRequestProperty(
+            "Accept",
+            "application/rss+xml, application/atom+xml, application/xml, text/xml"
+        )
         connection.setRequestProperty("User-Agent", USER_AGENT)
         connection.doInput = true
 
@@ -73,10 +74,7 @@ class ParseRssFeed {
             if (status !in 200..299) {
                 throw IllegalStateException("Feed server returned HTTP $status")
             }
-
-            connection.inputStream.use { input ->
-                return parseStream(input)
-            }
+            return connection.inputStream.use(::parseStream)
         } finally {
             connection.disconnect()
         }
@@ -99,22 +97,21 @@ class ParseRssFeed {
                     event.isStartElement -> {
                         val element = event.asStartElement()
                         val localName = element.name.localPart
-
-                        if (localName.equals("item", ignoreCase = true) ||
-                            localName.equals("entry", ignoreCase = true)
-                        ) {
+                        if (localName.equals("item", true) || localName.equals("entry", true)) {
                             current = ArticleDTO()
                             activeField = null
                             description.clear()
                         } else if (current != null) {
                             val prefix = element.name.prefix.orEmpty()
                             if ((prefix == "media" || prefix == "content") && current.imageLink.isBlank()) {
-                                readImageAttribute(element)?.let { current.imageLink = normalizeImage(it) }
+                                readUrlAttribute(element)?.let { current.imageLink = normalizeImage(it) }
                             }
 
                             activeField = fieldFor(localName)
-                            if (activeField == Field.IMAGE) {
-                                readImageAttribute(element)?.let { current.imageLink = normalizeImage(it) }
+                            when (activeField) {
+                                Field.LINK -> readUrlAttribute(element)?.let { current.link = it }
+                                Field.IMAGE -> readUrlAttribute(element)?.let { current.imageLink = normalizeImage(it) }
+                                else -> Unit
                             }
                         }
                     }
@@ -122,12 +119,12 @@ class ParseRssFeed {
                     event.isCharacters && current != null -> {
                         val value = event.asCharacters().data
                         when (activeField) {
-                            Field.TITLE -> current!!.title += value
-                            Field.LINK -> current!!.link += value
+                            Field.TITLE -> current.title += value
+                            Field.LINK -> current.link += value
                             Field.DESCRIPTION -> description.append(value)
-                            Field.DATE -> current!!.publicationDate += value
-                            Field.IMAGE -> if (current!!.imageLink.isBlank()) {
-                                current!!.imageLink = normalizeImage(value.trim())
+                            Field.DATE -> current.publicationDate += value
+                            Field.IMAGE -> if (current.imageLink.isBlank()) {
+                                current.imageLink = normalizeImage(value.trim())
                             }
                             null -> Unit
                         }
@@ -135,13 +132,11 @@ class ParseRssFeed {
 
                     event.isEndElement -> {
                         val localName = event.asEndElement().name.localPart
-                        if (current != null && localName.equals(descriptionTag, ignoreCase = true)) {
+                        if (current != null && localName.equals(descriptionTag, true)) {
                             current.description = extractDescription(description.toString().trim())
                         }
 
-                        if (localName.equals("item", ignoreCase = true) ||
-                            localName.equals("entry", ignoreCase = true)
-                        ) {
+                        if (localName.equals("item", true) || localName.equals("entry", true)) {
                             current?.let { article ->
                                 article.title = article.title.trim()
                                 article.link = normalizeArticleLink(article.link.trim())
@@ -159,8 +154,17 @@ class ParseRssFeed {
                             current = null
                             activeField = null
                             description.clear()
-                        } else if (current != null) {
-                            activeField = null
+                        } else {
+                            // Only clear a field when its own element closes. Keep collecting
+                            // description text across nested HTML/XML elements.
+                            activeField = when {
+                                localName.equals(titleTag, true) ||
+                                    localName.equals(linkTag, true) ||
+                                    localName.equals(descriptionTag, true) ||
+                                    localName.equals(dateTag, true) ||
+                                    localName.equals(imageTag, true) -> null
+                                else -> activeField
+                            }
                         }
                     }
                 }
@@ -170,73 +174,61 @@ class ParseRssFeed {
     }
 
     private fun fieldFor(localName: String): Field? = when {
-        localName.equals(titleTag, ignoreCase = true) -> Field.TITLE
-        localName.equals(linkTag, ignoreCase = true) -> Field.LINK
-        localName.equals(descriptionTag, ignoreCase = true) ||
-            localName.equals("summary", ignoreCase = true) ||
-            localName.equals("encoded", ignoreCase = true) -> Field.DESCRIPTION
-        localName.equals(dateTag, ignoreCase = true) ||
-            localName.equals("published", ignoreCase = true) ||
-            localName.equals("updated", ignoreCase = true) -> Field.DATE
-        localName.equals(imageTag, ignoreCase = true) -> Field.IMAGE
+        localName.equals(titleTag, true) -> Field.TITLE
+        localName.equals(linkTag, true) -> Field.LINK
+        localName.equals(descriptionTag, true) ||
+            localName.equals("summary", true) ||
+            localName.equals("encoded", true) -> Field.DESCRIPTION
+        localName.equals(dateTag, true) ||
+            localName.equals("published", true) ||
+            localName.equals("updated", true) -> Field.DATE
+        localName.equals(imageTag, true) -> Field.IMAGE
         else -> null
     }
 
-    private fun readImageAttribute(element: StartElement): String? {
+    private fun readUrlAttribute(element: StartElement): String? {
         val attributes = element.attributes
         while (attributes.hasNext()) {
             val attribute = attributes.next()
-            if (attribute.name.localPart.equals("url", ignoreCase = true) ||
-                attribute.name.localPart.equals("href", ignoreCase = true)
-            ) {
-                return attribute.value
-            }
+            if (attribute.name.localPart.equals("url", true) ||
+                attribute.name.localPart.equals("href", true)
+            ) return attribute.value
         }
         return null
     }
 
     private fun normalizeImage(value: String): String {
         val candidate = if (newspaperName == RssElements.MADAMASR) {
-            val match = Regex("""(?i)<img[^>]+src\\s*=\\s*["']([^"']+)["']""").find(value)
-            match?.groupValues?.getOrNull(1).orEmpty()
-        } else {
-            value.trim()
-        }
+            Regex("""(?i)<img[^>]+src\s*=\s*["']([^"']+)["']""")
+                .find(value)?.groupValues?.getOrNull(1).orEmpty()
+        } else value.trim()
+
         return when {
             candidate.isBlank() -> ""
-            candidate.startsWith("http://", ignoreCase = true) ||
-                candidate.startsWith("https://", ignoreCase = true) -> candidate
+            candidate.startsWith("http://", true) || candidate.startsWith("https://", true) -> candidate
             candidate.startsWith("//") -> "https:$candidate"
             else -> candidate
         }
     }
 
-    private fun normalizeArticleLink(value: String): String {
+    private fun normalizeArticleLink(value: String): String =
         if (newspaperName == RssElements.MADAMASR) {
-            return value.replace("https://", "https://mada34.appspot.com/")
-        }
-        return value
-    }
+            value.replace("https://", "https://mada34.appspot.com/")
+        } else value
 
     private fun isHttpUrl(value: String): Boolean =
-        value.startsWith("https://", ignoreCase = true) ||
-            value.startsWith("http://", ignoreCase = true)
+        value.startsWith("https://", true) || value.startsWith("http://", true)
 
     private fun extractDescription(value: String): String {
         var text = value.replace("\\n", " ").replace("/n", " ")
-            .replace("&quot;", "\"")
-            .trim()
+            .replace("&quot;", "\"").trim()
 
-        if (newspaperName == RssElements.RASSD) {
-            Regex("(?is)<p\\b[^>]*>(.*?)</p>").find(text)?.groupValues?.getOrNull(1)?.let {
-                text = it
-            }
-        } else if (newspaperName == RssElements.MADAMASR) {
+        if (newspaperName == RssElements.RASSD || newspaperName == RssElements.MADAMASR) {
             Regex("(?is)<p\\b[^>]*>(.*?)</p>").find(text)?.groupValues?.getOrNull(1)?.let {
                 text = it
             }
         } else if (newspaperName == RssElements.YOUM7) {
-            text = text.substringBefore("</br>", text).substringBefore("<br", text)
+            text = text.substringBefore("</br>").substringBefore("<br")
         }
 
         return text.replace(Regex("(?is)<script[^>]*>.*?</script>"), " ")
