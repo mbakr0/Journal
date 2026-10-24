@@ -1,5 +1,12 @@
 package online.mohmedbakr.newsfeed.data.model
 
+/**
+ * RSS element names used by the supported publishers.
+ *
+ * Each publisher receives its own immutable-by-convention map. Sharing one mutable
+ * map between publishers caused a later init() call to silently overwrite earlier
+ * publishers' element mappings.
+ */
 abstract class RssElements {
     companion object {
         const val MASRAWY = "masrawy"
@@ -17,96 +24,35 @@ abstract class RssElements {
         const val ARTICLE_LINK = "LINK"
         const val DATE = "DATE"
 
-        val NEWSPAPER_TAGS = HashMap<String, HashMap<String, String>>()
-        private val Tags = HashMap<String, String>()
-
+        val NEWSPAPER_TAGS = HashMap<String, Map<String, String>>()
 
         fun init(newspaperName: String) {
-            when (newspaperName) {
-                MASRAWY -> initMasrawy()
-                YOUM7 -> initYoum7()
-                RASSD -> initRassd()
-                ARABIC_BBC -> initArabicBBC()
-                MADAMASR -> initMadaMasr()
-                ALARABIYA -> initAlarabiya()
-                ALHADATH -> initAlhadath()
-                ALJAZEERA -> initAljazeera()
+            val tags = when (newspaperName) {
+                MASRAWY -> publisherTags("title", "description", "link", "url", "pubDate")
+                YOUM7 -> publisherTags("title", "description", "link", "enclosure", "pubDate")
+                RASSD -> publisherTags("title", "description", "guid", "noImage", "pubDate")
+                ARABIC_BBC -> publisherTags("title", "description", "guid", "noImage", "pubDate")
+                MADAMASR -> publisherTags("title", "description", "guid", "noImage", "pubDate")
+                ALARABIYA -> publisherTags("title", "description", "link", "content", "pubDate")
+                ALHADATH -> publisherTags("title", "description", "guid", "enclosure", "pubDate")
+                ALJAZEERA -> publisherTags("title", "description", "guid", "noImage", "pubDate")
+                else -> return
             }
+            NEWSPAPER_TAGS[newspaperName] = tags
         }
 
-
-        private fun initMasrawy() {
-            Tags[TITLE] = "title"
-            Tags[DESCRIPTION] = "description"
-            Tags[ARTICLE_LINK] = "link"
-            Tags[IMAGE_URL] = "url"
-            Tags[DATE] = "pubDate"
-            NEWSPAPER_TAGS[MASRAWY] = Tags
-        }
-
-
-        private fun initYoum7() {
-
-            Tags[TITLE] = "title"
-            Tags[DESCRIPTION] = "description"
-            Tags[ARTICLE_LINK] = "link"
-            Tags[IMAGE_URL] = "enclosure"
-            Tags[DATE] = "pubDate"
-            NEWSPAPER_TAGS[YOUM7] = Tags
-        }
-
-        private fun initRassd() {
-            Tags[TITLE] = "title"
-            Tags[DESCRIPTION] = "description"
-            Tags[ARTICLE_LINK] = "guid"
-            Tags[IMAGE_URL] = "noImage"
-            Tags[DATE] = "pubDate"
-            NEWSPAPER_TAGS[RASSD] = Tags
-        }
-
-        private fun initArabicBBC() {
-            Tags[TITLE] = "title"
-            Tags[DESCRIPTION] = "description"
-            Tags[ARTICLE_LINK] = "guid"
-            Tags[IMAGE_URL] = "noImage"
-            Tags[DATE] = "pubDate"
-            NEWSPAPER_TAGS[ARABIC_BBC] = Tags
-        }
-
-        private fun initMadaMasr() {
-            Tags[TITLE] = "title"
-            Tags[DESCRIPTION] = "description"
-            Tags[ARTICLE_LINK] = "guid"
-            Tags[IMAGE_URL] = "noImage"
-            Tags[DATE] = "pubDate"
-            NEWSPAPER_TAGS[MADAMASR] = Tags
-        }
-
-        private fun initAlarabiya() {
-            Tags[TITLE] = "title"
-            Tags[DESCRIPTION] = "description"
-            Tags[ARTICLE_LINK] = "link"
-            Tags[IMAGE_URL] = "content"
-            Tags[DATE] = "pubDate"
-            NEWSPAPER_TAGS[ALARABIYA] = Tags
-        }
-
-        private fun initAlhadath() {
-            Tags[TITLE] = "title"
-            Tags[DESCRIPTION] = "description"
-            Tags[ARTICLE_LINK] = "guid"
-            Tags[IMAGE_URL] = "enclosure"
-            Tags[DATE] = "pubDate"
-            NEWSPAPER_TAGS[ALHADATH] = Tags
-        }
-
-        private fun initAljazeera() {
-            Tags[TITLE] = "title"
-            Tags[DESCRIPTION] = "description"
-            Tags[ARTICLE_LINK] = "guid"
-            Tags[IMAGE_URL] = "noImage"
-            Tags[DATE] = "pubDate"
-            NEWSPAPER_TAGS[ALJAZEERA] = Tags
-        }
+        private fun publisherTags(
+            title: String,
+            description: String,
+            link: String,
+            image: String,
+            date: String,
+        ): Map<String, String> = mapOf(
+            TITLE to title,
+            DESCRIPTION to description,
+            ARTICLE_LINK to link,
+            IMAGE_URL to image,
+            DATE to date,
+        )
     }
 }
