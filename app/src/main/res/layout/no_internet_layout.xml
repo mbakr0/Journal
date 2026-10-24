@@ -11,9 +11,12 @@
     <com.google.android.material.card.MaterialCardView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="8dp"
+        app:cardBackgroundColor="?attr/colorSurface"
         app:cardCornerRadius="24dp"
-        app:cardElevation="0dp">
+        app:cardElevation="0dp"
+        app:strokeColor="?attr/colorSurfaceVariant"
+        app:strokeWidth="1dp">
+
         <ImageView
             android:layout_width="80dp"
             android:layout_height="80dp"
@@ -39,7 +42,16 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:gravity="center"
-        android:text="@string/no_data"
+        android:text="@string/internet_description"
         android:textColor="?attr/colorOnSurfaceVariant"
         android:textSize="14sp" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/retry_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/retry"
+        android:textAllCaps="false"
+        app:cornerRadius="14dp" />
 </LinearLayout>
