@@ -35,7 +35,7 @@ class FeedRecyclerView(
             binding.article = item
             binding.progressColor = progressColor
             val url = item.link
-            binding.singleItem.setOnClickListener {
+            binding.root.setOnClickListener {
                 itemClick(url)
             }
             binding.bookmarkIcon.setOnClickListener {
