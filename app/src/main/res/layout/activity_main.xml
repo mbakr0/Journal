@@ -12,25 +12,13 @@
         android:background="?attr/colorSurface"
         app:elevation="0dp">
 
-        <com.google.android.material.appbar.CollapsingToolbarLayout
-            android:id="@+id/toolbarLayout"
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="112dp"
+            android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorSurface"
-            app:collapsedTitleTextAppearance="@style/My_TextAppearance_Toolbar"
-            app:collapsedTitleTextColor="?attr/colorOnSurface"
-            app:expandedTitleTextAppearance="@style/My_TextAppearance_Toolbar"
-            app:expandedTitleTextColor="?attr/colorOnSurface"
-            app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed"
-            app:title="@string/app_name">
-
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:background="@android:color/transparent"
-                app:layout_collapseMode="pin" />
-        </com.google.android.material.appbar.CollapsingToolbarLayout>
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:titleTextAppearance="@style/Journal_ToolbarTitle" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.fragment.app.FragmentContainerView
