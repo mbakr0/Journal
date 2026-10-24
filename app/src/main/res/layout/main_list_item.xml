@@ -4,8 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-        <variable name="progressColor" type="int" />
-        <variable name="article" type="online.mohmedbakr.newsfeed.core.ArticleDTO" />
+        <variable
+            name="progressColor"
+            type="int" />
+        <variable
+            name="article"
+            type="online.mohmedbakr.newsfeed.core.ArticleDTO" />
     </data>
 
     <com.google.android.material.card.MaterialCardView
@@ -13,83 +17,96 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="10dp"
         android:clickable="true"
         android:focusable="true"
         app:cardBackgroundColor="?attr/colorSurface"
         app:cardCornerRadius="18dp"
-        app:cardElevation="1dp"
-        app:cardUseCompatPadding="true"
+        app:cardElevation="0dp"
         app:strokeColor="?attr/colorSurfaceVariant"
         app:strokeWidth="1dp">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="12dp">
+            android:orientation="vertical"
+            android:padding="14dp">
 
-            <com.google.android.material.imageview.ShapeableImageView
-                android:id="@+id/article_image"
-                android:layout_width="118dp"
-                android:layout_height="88dp"
-                android:adjustViewBounds="true"
-                android:scaleType="centerCrop"
-                android:setImage="@{article.imageLink}"
-                android:setProgressColor="@{progressColor}"
-                app:shapeAppearanceOverlay="@style/Journal_ImageShape"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:background="@color/background" />
-
-            <TextView
-                android:id="@+id/article_title"
-                style="@style/article_title_style"
-                android:layout_width="0dp"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
-                android:ellipsize="end"
-                android:maxLines="3"
-                android:setTitle="@{article.title}"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/article_image"
-                app:layout_constraintTop_toTopOf="@id/article_image" />
+                android:gravity="top"
+                android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/article_description"
-                android:layout_width="0dp"
+                <com.google.android.material.imageview.ShapeableImageView
+                    android:id="@+id/article_image"
+                    android:layout_width="112dp"
+                    android:layout_height="96dp"
+                    android:contentDescription="@string/logo"
+                    android:scaleType="centerCrop"
+                    android:setImage="@{article.imageLink}"
+                    android:setProgressColor="@{progressColor}"
+                    app:shapeAppearanceOverlay="@style/Journal_ImageShape"
+                    tools:background="@color/background" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/article_title"
+                        style="@style/article_title_style"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:ellipsize="end"
+                        android:maxLines="3"
+                        android:setTitle="@{article.title}"
+                        tools:text="News headline appears here across a few lines" />
+
+                    <TextView
+                        android:id="@+id/article_description"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="6dp"
+                        android:ellipsize="end"
+                        android:maxLines="2"
+                        android:setDescription="@{article.description}"
+                        android:textColor="?attr/colorOnSurfaceVariant"
+                        tools:text="A short summary of the article." />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
-                android:layout_marginTop="5dp"
-                android:ellipsize="end"
-                android:maxLines="2"
-                android:setDescription="@{article.description}"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/article_image"
-                app:layout_constraintTop_toBottomOf="@id/article_title" />
+                android:layout_marginTop="8dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/article_date"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:setDate="@{article.publicationDate}"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/article_image"
-                app:layout_constraintEnd_toStartOf="@id/bookmark_icon"
-                tools:text="May 31, 2022" />
+                <TextView
+                    android:id="@+id/article_date"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
+                    android:maxLines="2"
+                    android:setDate="@{article.publicationDate}"
+                    android:textColor="?attr/colorOnSurfaceVariant"
+                    android:textSize="12sp"
+                    tools:text="May 31, 2022" />
 
-            <androidx.appcompat.widget.AppCompatImageButton
-                android:id="@+id/bookmark_icon"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:background="@drawable/ripple"
-                android:contentDescription="@string/remove_article"
-                android:padding="8dp"
-                android:src="@drawable/ic_bookmark_state"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/article_image" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                <androidx.appcompat.widget.AppCompatImageButton
+                    android:id="@+id/bookmark_icon"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:background="@drawable/ripple"
+                    android:contentDescription="@string/remove_article"
+                    android:padding="8dp"
+                    android:src="@drawable/ic_bookmark_state" />
+            </LinearLayout>
+        </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 </layout>
