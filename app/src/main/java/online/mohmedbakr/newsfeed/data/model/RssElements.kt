@@ -1,12 +1,5 @@
 package online.mohmedbakr.newsfeed.data.model
 
-/**
- * RSS element names used by the supported publishers.
- *
- * Each publisher receives its own immutable-by-convention map. Sharing one mutable
- * map between publishers caused a later init() call to silently overwrite earlier
- * publishers' element mappings.
- */
 abstract class RssElements {
     companion object {
         const val MASRAWY = "masrawy"
@@ -24,30 +17,29 @@ abstract class RssElements {
         const val ARTICLE_LINK = "LINK"
         const val DATE = "DATE"
 
-        val NEWSPAPER_TAGS = HashMap<String, Map<String, String>>()
+        // A separate map per publisher prevents init() from overwriting other sources.
+        val NEWSPAPER_TAGS = HashMap<String, HashMap<String, String>>()
 
         fun init(newspaperName: String) {
             val tags = when (newspaperName) {
-                MASRAWY -> publisherTags("title", "description", "link", "url", "pubDate")
-                YOUM7 -> publisherTags("title", "description", "link", "enclosure", "pubDate")
-                RASSD -> publisherTags("title", "description", "guid", "noImage", "pubDate")
-                ARABIC_BBC -> publisherTags("title", "description", "guid", "noImage", "pubDate")
-                MADAMASR -> publisherTags("title", "description", "guid", "noImage", "pubDate")
-                ALARABIYA -> publisherTags("title", "description", "link", "content", "pubDate")
-                ALHADATH -> publisherTags("title", "description", "guid", "enclosure", "pubDate")
-                ALJAZEERA -> publisherTags("title", "description", "guid", "noImage", "pubDate")
+                MASRAWY -> tags("title", "description", "link", "url", "pubDate")
+                YOUM7 -> tags("title", "description", "link", "enclosure", "pubDate")
+                RASSD, ARABIC_BBC, MADAMASR, ALJAZEERA ->
+                    tags("title", "description", "guid", "noImage", "pubDate")
+                ALARABIYA -> tags("title", "description", "link", "content", "pubDate")
+                ALHADATH -> tags("title", "description", "guid", "enclosure", "pubDate")
                 else -> return
             }
             NEWSPAPER_TAGS[newspaperName] = tags
         }
 
-        private fun publisherTags(
+        private fun tags(
             title: String,
             description: String,
             link: String,
             image: String,
             date: String,
-        ): Map<String, String> = mapOf(
+        ) = hashMapOf(
             TITLE to title,
             DESCRIPTION to description,
             ARTICLE_LINK to link,
