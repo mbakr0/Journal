@@ -4,23 +4,23 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
-    >
+    android:background="?attr/colorBackground">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?android:attr/colorBackground">
+        android:background="?attr/colorSurface"
+        app:elevation="0dp">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
             android:id="@+id/toolbarLayout"
             android:layout_width="match_parent"
-            android:layout_height="120dp"
-            android:background="?android:attr/colorBackground"
+            android:layout_height="112dp"
+            android:background="?attr/colorSurface"
             app:collapsedTitleTextAppearance="@style/My_TextAppearance_Toolbar"
-            app:collapsedTitleTextColor="?attr/colorOnSecondaryContainer"
+            app:collapsedTitleTextColor="?attr/colorOnSurface"
             app:expandedTitleTextAppearance="@style/My_TextAppearance_Toolbar"
-            app:expandedTitleTextColor="?attr/colorOnSecondaryContainer"
+            app:expandedTitleTextColor="?attr/colorOnSurface"
             app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed"
             app:title="@string/app_name">
 
@@ -28,10 +28,9 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:background="?android:attr/colorBackground"
+                android:background="@android:color/transparent"
                 app:layout_collapseMode="pin" />
         </com.google.android.material.appbar.CollapsingToolbarLayout>
-
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.fragment.app.FragmentContainerView
@@ -42,6 +41,5 @@
         app:defaultNavHost="true"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         app:navGraph="@navigation/navigation" />
-
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
