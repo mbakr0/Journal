@@ -13,6 +13,7 @@
     <string name="delete_all">Delete All</string>
     <string name="filter">Filter</string>
     <string name="retry">Retry</string>
+    <string name="internet_description">Check your connection and try again.</string>
     <string name="refresh">Refresh</string>
 
     <string name="theNews">الأخبار</string>
