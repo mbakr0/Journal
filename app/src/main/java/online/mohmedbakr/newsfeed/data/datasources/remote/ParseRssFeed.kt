@@ -86,7 +86,8 @@ class ParseRssFeed {
         setFactoryProperty(factory, XMLInputFactory.SUPPORT_DTD, false)
 
         val parsedArticles = mutableListOf<ArticleDTO>()
-        factory.createXMLEventReader(input).use { reader ->
+        val reader = factory.createXMLEventReader(input)
+        try {
             var current: ArticleDTO? = null
             var activeField: Field? = null
             val description = StringBuilder()
@@ -169,6 +170,8 @@ class ParseRssFeed {
                     }
                 }
             }
+        } finally {
+            runCatching { reader.close() }
         }
         return parsedArticles
     }
@@ -187,7 +190,8 @@ class ParseRssFeed {
     }
 
     private fun readUrlAttribute(element: StartElement): String? {
-        val attributes = element.attributes
+        @Suppress("UNCHECKED_CAST")
+        val attributes = element.attributes as Iterator<javax.xml.stream.events.Attribute>
         while (attributes.hasNext()) {
             val attribute = attributes.next()
             if (attribute.name.localPart.equals("url", true) ||
