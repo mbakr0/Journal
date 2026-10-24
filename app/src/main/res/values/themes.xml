@@ -17,6 +17,12 @@
         <item name="colorOnSurfaceInverse">@color/white</item>
     </style>
 
+    <style name="Journal_ToolbarTitle" parent="TextAppearance.Material3.TitleLarge">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">22sp</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+
     <style name="Journal_TabText" parent="TextAppearance.Material3.LabelLarge">
         <item name="android:textStyle">bold</item>
     </style>
