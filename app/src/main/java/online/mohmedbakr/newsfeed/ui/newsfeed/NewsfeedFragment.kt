@@ -38,6 +38,7 @@ import online.mohmedbakr.newsfeed.databinding.ChipGroupBinding
 import online.mohmedbakr.newsfeed.databinding.FragmentNewsfeedBinding
 import online.mohmedbakr.newsfeed.data.repository.CategoriesRepository
 import online.mohmedbakr.newsfeed.ui.MainActivity
+import online.mohmedbakr.newsfeed.ui.newsfeed.newsfragment.SingleNewspaperViewpagerAdapter
 
 class NewsfeedFragment : Fragment() {
 

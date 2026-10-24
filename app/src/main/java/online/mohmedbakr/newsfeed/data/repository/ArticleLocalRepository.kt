@@ -5,49 +5,38 @@ import androidx.lifecycle.asLiveData
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import online.mohmedbakr.newsfeed.data.model.Article
 import online.mohmedbakr.newsfeed.data.datasources.local.database.ArticleDao
+import online.mohmedbakr.newsfeed.data.model.Article
 
+/**
+ * Repository for locally cached and bookmarked articles.
+ *
+ * Room owns the observable query; write operations are dispatched to IO so callers
+ * can safely invoke them from a ViewModel coroutine.
+ */
 class ArticleLocalRepository(
     private val articleDao: ArticleDao,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) {
+    private val articles: LiveData<List<Article>> = articleDao.getArticles().asLiveData()
+
+    fun getLiveData(): LiveData<List<Article>> = articles
 
     /**
-     * Get the articles list from the local db
-     * @return Result the holds a Success with all the articles or an Error object with the error message
+     * Kept for source compatibility with existing callers. Prefer [getLiveData].
      */
-    private var articles: LiveData<List<Article>> = articleDao.getArticles().asLiveData()
+    @Deprecated("Use getLiveData()")
+    fun getLiveDate(): LiveData<List<Article>> = getLiveData()
 
-    fun getLiveDate(): LiveData<List<Article>> {
-        return articles
+    suspend fun saveArticle(article: Article) = withContext(ioDispatcher) {
+        articleDao.saveArticle(article)
     }
 
-    /**
-     * Insert a article in the db.
-     * @param article the article to be inserted
-     */
-    suspend fun saveArticle(article: Article) =
-        withContext(ioDispatcher) {
-            articleDao.saveArticle(article)
-        }
+    suspend fun deleteArticle(article: Article) = withContext(ioDispatcher) {
+        articleDao.deleteArticle(article)
+    }
 
-    /**
-     * Deletes single article in the db
-     */
-
-    suspend fun deleteArticle(article: Article) =
-        withContext(ioDispatcher) {
-            articleDao.deleteArticle(article)
-        }
-
-    /**
-     * Deletes all the articles in the db
-     */
-    suspend fun deleteAllArticles() =
-        withContext(ioDispatcher) {
-            articleDao.deleteAllArticles()
-        }
-
-
+    suspend fun deleteAllArticles() = withContext(ioDispatcher) {
+        articleDao.deleteAllArticles()
+    }
 }

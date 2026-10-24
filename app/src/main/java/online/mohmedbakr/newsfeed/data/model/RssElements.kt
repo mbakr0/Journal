@@ -17,96 +17,34 @@ abstract class RssElements {
         const val ARTICLE_LINK = "LINK"
         const val DATE = "DATE"
 
+        // A separate map per publisher prevents init() from overwriting other sources.
         val NEWSPAPER_TAGS = HashMap<String, HashMap<String, String>>()
-        private val Tags = HashMap<String, String>()
-
 
         fun init(newspaperName: String) {
-            when (newspaperName) {
-                MASRAWY -> initMasrawy()
-                YOUM7 -> initYoum7()
-                RASSD -> initRassd()
-                ARABIC_BBC -> initArabicBBC()
-                MADAMASR -> initMadaMasr()
-                ALARABIYA -> initAlarabiya()
-                ALHADATH -> initAlhadath()
-                ALJAZEERA -> initAljazeera()
+            val tags = when (newspaperName) {
+                MASRAWY -> tags("title", "description", "link", "url", "pubDate")
+                YOUM7 -> tags("title", "description", "link", "enclosure", "pubDate")
+                RASSD, ARABIC_BBC, MADAMASR, ALJAZEERA ->
+                    tags("title", "description", "guid", "noImage", "pubDate")
+                ALARABIYA -> tags("title", "description", "link", "content", "pubDate")
+                ALHADATH -> tags("title", "description", "guid", "enclosure", "pubDate")
+                else -> return
             }
+            NEWSPAPER_TAGS[newspaperName] = tags
         }
 
-
-        private fun initMasrawy() {
-            Tags[TITLE] = "title"
-            Tags[DESCRIPTION] = "description"
-            Tags[ARTICLE_LINK] = "link"
-            Tags[IMAGE_URL] = "url"
-            Tags[DATE] = "pubDate"
-            NEWSPAPER_TAGS[MASRAWY] = Tags
-        }
-
-
-        private fun initYoum7() {
-
-            Tags[TITLE] = "title"
-            Tags[DESCRIPTION] = "description"
-            Tags[ARTICLE_LINK] = "link"
-            Tags[IMAGE_URL] = "enclosure"
-            Tags[DATE] = "pubDate"
-            NEWSPAPER_TAGS[YOUM7] = Tags
-        }
-
-        private fun initRassd() {
-            Tags[TITLE] = "title"
-            Tags[DESCRIPTION] = "description"
-            Tags[ARTICLE_LINK] = "guid"
-            Tags[IMAGE_URL] = "noImage"
-            Tags[DATE] = "pubDate"
-            NEWSPAPER_TAGS[RASSD] = Tags
-        }
-
-        private fun initArabicBBC() {
-            Tags[TITLE] = "title"
-            Tags[DESCRIPTION] = "description"
-            Tags[ARTICLE_LINK] = "guid"
-            Tags[IMAGE_URL] = "noImage"
-            Tags[DATE] = "pubDate"
-            NEWSPAPER_TAGS[ARABIC_BBC] = Tags
-        }
-
-        private fun initMadaMasr() {
-            Tags[TITLE] = "title"
-            Tags[DESCRIPTION] = "description"
-            Tags[ARTICLE_LINK] = "guid"
-            Tags[IMAGE_URL] = "noImage"
-            Tags[DATE] = "pubDate"
-            NEWSPAPER_TAGS[MADAMASR] = Tags
-        }
-
-        private fun initAlarabiya() {
-            Tags[TITLE] = "title"
-            Tags[DESCRIPTION] = "description"
-            Tags[ARTICLE_LINK] = "link"
-            Tags[IMAGE_URL] = "content"
-            Tags[DATE] = "pubDate"
-            NEWSPAPER_TAGS[ALARABIYA] = Tags
-        }
-
-        private fun initAlhadath() {
-            Tags[TITLE] = "title"
-            Tags[DESCRIPTION] = "description"
-            Tags[ARTICLE_LINK] = "guid"
-            Tags[IMAGE_URL] = "enclosure"
-            Tags[DATE] = "pubDate"
-            NEWSPAPER_TAGS[ALHADATH] = Tags
-        }
-
-        private fun initAljazeera() {
-            Tags[TITLE] = "title"
-            Tags[DESCRIPTION] = "description"
-            Tags[ARTICLE_LINK] = "guid"
-            Tags[IMAGE_URL] = "noImage"
-            Tags[DATE] = "pubDate"
-            NEWSPAPER_TAGS[ALJAZEERA] = Tags
-        }
+        private fun tags(
+            title: String,
+            description: String,
+            link: String,
+            image: String,
+            date: String,
+        ) = hashMapOf(
+            TITLE to title,
+            DESCRIPTION to description,
+            ARTICLE_LINK to link,
+            IMAGE_URL to image,
+            DATE to date,
+        )
     }
 }

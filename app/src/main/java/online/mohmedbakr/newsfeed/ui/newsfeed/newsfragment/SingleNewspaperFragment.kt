@@ -8,7 +8,6 @@ import android.widget.Toast
 import androidx.core.text.HtmlCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import kotlinx.coroutines.flow.collectLatest
@@ -44,7 +43,6 @@ class SingleNewspaperFragment : Fragment() {
     private var position: Int = 0
     private lateinit var adapter: FeedRecyclerView
     private lateinit var mainViewModel: MainViewModel
-    private lateinit var observer: Observer<Boolean>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -104,23 +102,20 @@ class SingleNewspaperFragment : Fragment() {
 
         binding.swipeToRefresh.setOnRefreshListener {
             (activity as MainActivity).viewModel.apply {
-                networkState.value?.let { setNetworkState(it) }
+                setNetworkState(networkState.value)
             }
             binding.swipeToRefresh.isRefreshing = false
         }
 
-        observer = Observer {
-            when (it) {
-                true -> {
+        lifecycleScope.launch {
+            mainViewModel.networkState.collectLatest { isConnected ->
+                if (isConnected) {
                     getNews()
-                }
-
-                false -> {
+                } else {
                     viewModel.error.value = Response.NO_INTERNET_CONNECTION
                 }
             }
         }
-        mainViewModel.networkState.observe(viewLifecycleOwner, observer)
         lifecycleScope.launch {
             mainViewModel.categoryList.collectLatest { list ->
                 viewModel.setCategoryList(list)
