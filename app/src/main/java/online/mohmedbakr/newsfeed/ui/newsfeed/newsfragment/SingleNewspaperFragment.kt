@@ -100,6 +100,14 @@ class SingleNewspaperFragment : Fragment() {
         }
         binding.feedRecyclerView.adapter = adapter
 
+        binding.noInternet.retryButton.setOnClickListener {
+            if (mainViewModel.networkState.value) {
+                getNews()
+            } else {
+                Toast.makeText(requireContext(), R.string.no_internet_connection, Toast.LENGTH_SHORT).show()
+            }
+        }
+
         binding.swipeToRefresh.setOnRefreshListener {
             if (mainViewModel.networkState.value) {
                 getNews()
