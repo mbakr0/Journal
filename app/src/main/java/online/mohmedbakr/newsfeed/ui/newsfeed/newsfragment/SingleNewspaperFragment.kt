@@ -22,6 +22,7 @@ import online.mohmedbakr.newsfeed.ui.MainViewModel
 import online.mohmedbakr.newsfeed.ui.bookmark.BookmarkViewModel
 import online.mohmedbakr.newsfeed.ui.bookmark.BookmarkViewModelFactory
 import online.mohmedbakr.newsfeed.ui.newsfeed.NewsfeedFragmentDirections
+import androidx.core.view.isVisible
 
 private const val ARG_PARAM1 = "param1"
 
@@ -115,7 +116,7 @@ class SingleNewspaperFragment : Fragment() {
             }
         }
 
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             mainViewModel.networkState.collectLatest { isConnected ->
                 if (isConnected) {
                     getNews()
@@ -124,7 +125,7 @@ class SingleNewspaperFragment : Fragment() {
                 }
             }
         }
-        lifecycleScope.launch {
+        viewLifecycleOwner.lifecycleScope.launch {
             mainViewModel.categoryList.collectLatest { list ->
                 viewModel.setCategoryList(list)
             }
@@ -133,44 +134,78 @@ class SingleNewspaperFragment : Fragment() {
 
         viewModel.articleList.observe(viewLifecycleOwner) { list ->
             binding.swipeToRefresh.isRefreshing = false
+
             binding.shimmerViewContainer.stopShimmer()
             binding.shimmerViewContainer.visibility = View.GONE
             binding.noInternet.noInternet.visibility = View.GONE
+
+            binding.emptyFeed.visibility =
+                if (list.isEmpty()) View.VISIBLE else View.GONE
+
             adapter.submitList(list)
-
-
         }
 
+        viewModel.error.observe(viewLifecycleOwner) { errorCode ->
+            if (errorCode == null) return@observe
 
-
-        viewModel.error.observe(viewLifecycleOwner) {
             binding.swipeToRefresh.isRefreshing = false
-            if (viewModel.articleList.value == null || viewModel.articleList.value!!.isEmpty()) {
-                binding.shimmerViewContainer.stopShimmer()
-                binding.shimmerViewContainer.visibility = View.GONE
+
+            // Always stop loading, even if previously loaded articles exist.
+            binding.shimmerViewContainer.stopShimmer()
+            binding.shimmerViewContainer.visibility = View.GONE
+
+            if (adapter.currentList.isEmpty()) {
+                binding.emptyFeed.visibility = View.GONE
                 binding.noInternet.noInternet.visibility = View.VISIBLE
 
-                if (it == Response.ERROR_CONNECT_TO_THE_HOST)
-                    binding.noInternet.errorText.text = Response.ERROR_CONNECT_TO_THE_HOST_MESSAGE
-            }
+                binding.noInternet.errorText.text = when (errorCode) {
+                    Response.ERROR_CONNECT_TO_THE_HOST ->
+                        Response.ERROR_CONNECT_TO_THE_HOST_MESSAGE
 
+                    Response.NO_INTERNET_CONNECTION ->
+                        getString(R.string.no_internet_connection)
+
+                    else ->
+                        Response.ERROR_CONNECT_TO_THE_HOST_MESSAGE
+                }
+            } else {
+                // Keep existing articles visible if a refresh fails.
+                binding.noInternet.noInternet.visibility = View.GONE
+                binding.emptyFeed.visibility = View.GONE
+            }
         }
 
+
     }
+
 
     private fun getNews() {
         binding.noInternet.noInternet.visibility = View.GONE
-        binding.shimmerViewContainer.visibility = View.VISIBLE
-        binding.shimmerViewContainer.startShimmer()
+        binding.emptyFeed.visibility = View.GONE
+
+        if (adapter.currentList.isEmpty()) {
+            binding.shimmerViewContainer.visibility = View.VISIBLE
+            binding.shimmerViewContainer.startShimmer()
+        } else {
+            // Keep existing content visible during refresh.
+            binding.shimmerViewContainer.stopShimmer()
+            binding.shimmerViewContainer.visibility = View.GONE
+        }
+
         viewModel.getNews(position)
     }
+
 
 
     override fun onResume() {
         super.onResume()
 
-        if (!binding.shimmerViewContainer.isShimmerStarted)
+        if (
+            binding.shimmerViewContainer.isVisible &&
+            !binding.shimmerViewContainer.isShimmerStarted
+        ) {
             binding.shimmerViewContainer.startShimmer()
+        }
     }
 
     companion object {

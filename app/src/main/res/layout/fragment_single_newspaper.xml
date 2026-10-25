@@ -48,6 +48,19 @@
         </LinearLayout>
     </com.facebook.shimmer.ShimmerFrameLayout>
 
+
+    <TextView
+        android:id="@+id/emptyFeed"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:padding="32dp"
+        android:text="@string/empty_feed_message"
+        android:textColor="?attr/colorOnSurfaceVariant"
+        android:textSize="16sp"
+        android:visibility="gone" />
+
+
     <include
         android:id="@+id/no_internet"
         layout="@layout/no_internet_layout"

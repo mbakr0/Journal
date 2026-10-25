@@ -1,6 +1,5 @@
 package online.mohmedbakr.newsfeed.util
 
-import android.util.Log
 import java.time.Duration
 import java.time.Instant
 import java.time.LocalDateTime
@@ -12,7 +11,6 @@ import java.util.Locale
 
 fun calculateDate(publicationDate: String?): String {
     if (publicationDate.isNullOrBlank()) return "Unknown"
-
     return try {
         val published = parseDate(publicationDate)
         val now = Instant.now()
@@ -30,26 +28,55 @@ fun calculateDate(publicationDate: String?): String {
         }
 
     } catch (e: Exception) {
-        e.message?.let { Log.d("LOG_S","$it + $publicationDate") }
        publicationDate
     }
 }
 
+
 fun parseDate(date: String): Instant {
-    val rfcFormatter = DateTimeFormatter.RFC_1123_DATE_TIME.withLocale(Locale.ENGLISH)
+    val rfcFormatter =
+        DateTimeFormatter.RFC_1123_DATE_TIME.withLocale(Locale.ENGLISH)
 
     return try {
+        // Standard RSS dates, for example:
+        // Sun, 25 Oct 2026 05:02:00 GMT
         ZonedDateTime.parse(date, rfcFormatter).toInstant()
+
     } catch (_: DateTimeParseException) {
         try {
-            val usFormatter = DateTimeFormatter.ofPattern("M/d/yyyy h:mm:ss a", Locale.ENGLISH)
-            val local = LocalDateTime.parse(date, usFormatter)
-            local.atZone(ZoneId.systemDefault()).toInstant()
-        } catch (_: Exception) {
-            throw IllegalArgumentException("Unsupported date format: $date")
+            // Youm7 translated dates, for example:
+            // Sun, 25 Oct 2026 05:02 PM
+            val youm7Formatter = DateTimeFormatter.ofPattern(
+                "EEE, d MMM yyyy hh:mm a",
+                Locale.ENGLISH
+            )
+
+            LocalDateTime.parse(date.trim(), youm7Formatter)
+                .atZone(ZoneId.systemDefault())
+                .toInstant()
+
+        } catch (_: DateTimeParseException) {
+            try {
+                // Existing numeric dates, for example:
+                // 10/25/2026 5:02:00 PM
+                val usFormatter = DateTimeFormatter.ofPattern(
+                    "M/d/yyyy h:mm:ss a",
+                    Locale.ENGLISH
+                )
+
+                LocalDateTime.parse(date.trim(), usFormatter)
+                    .atZone(ZoneId.systemDefault())
+                    .toInstant()
+
+            } catch (_: DateTimeParseException) {
+                throw IllegalArgumentException(
+                    "Unsupported date format: $date"
+                )
+            }
         }
     }
 }
+
 
 private fun format(value: Long, unit: String): String {
     return if (value == 1L) "$value $unit ago"

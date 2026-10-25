@@ -43,7 +43,7 @@
     <string name="Miscellaneous">متنوع</string>
 
     <string name="ArabAndWorldNews">أخبار الصفحة الرئيسية</string>
-
+    <string name="empty_feed_message">No articles available right now.</string>
     <string name="otherSports">رياضات أخرى</string>
     <string name="opinions">آراء حرة</string>
     <string name="PhotoAlbum">ألبوم الصور</string>

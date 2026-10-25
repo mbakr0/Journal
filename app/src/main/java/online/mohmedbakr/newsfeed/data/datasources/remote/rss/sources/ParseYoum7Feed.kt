@@ -31,4 +31,5 @@ class ParseYoum7Feed : ParseRssFeed(
         }
         return translated.replace("،", ",")
     }
+
 }
