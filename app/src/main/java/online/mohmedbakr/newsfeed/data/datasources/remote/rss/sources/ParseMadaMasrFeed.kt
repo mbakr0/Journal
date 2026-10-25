@@ -1,0 +1,19 @@
+package online.mohmedbakr.newsfeed.data.datasources.remote.rss.sources
+
+import online.mohmedbakr.newsfeed.data.datasources.remote.rss.ParseRssFeed
+import online.mohmedbakr.newsfeed.data.datasources.remote.rss.RssFeedTags
+import online.mohmedbakr.newsfeed.data.datasources.remote.rss.extractor.MadaMasrImageExtractor
+
+class ParseMadaMasrFeed : ParseRssFeed(
+    tags = RssFeedTags(link = "guid", image = "noImage"),
+    imageExtractor = MadaMasrImageExtractor()
+) {
+    override fun normalizeArticleLink(link: String): String =
+        link.trim().replace("https://", "https://mada34.appspot.com/")
+
+    override fun extractDescription(value: String): String {
+        val raw = cleanRawDescriptionText(value)
+        val paragraphText = extractParagraphText(raw)
+        return cleanHtmlTags(paragraphText)
+    }
+}

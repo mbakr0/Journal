@@ -21,55 +21,26 @@ class RssLink {
         private const val MADA_MASR_BASE_URL = "https://www.madamasr.com/feed/"
     }
 
-    fun getMasrawyLinksByCategories(categories: ArrayList<String>): ArrayList<URL> {
-        val linksArray = ArrayList<URL>()
-        categories.forEach {
-            linksArray.add(URL(MASRAWY_BASE_URL + it))
+    fun getMasrawyLinksByCategories(categories: List<String>): List<URL> =
+        categories.map { URL(MASRAWY_BASE_URL + it) }
+
+    fun getYoum7LinksByCategories(categories: List<String>): List<URL> =
+        categories.map { URL(YOUM7_BASE_URL + it) }
+
+    fun getAlarabiyaLinksByCategories(categories: List<String>): List<URL> =
+        categories.map { URL(ALARABIYA_BASE_URL + it) }
+
+    fun getAlhadathLinksByCategories(categories: List<String>): List<URL> =
+        categories.map { cat ->
+            if (cat == "0") URL(ALHADTH_ARTICLES_BASE_URL)
+            else URL(ALHADTH_BASE_URL + cat)
         }
-        return linksArray
-    }
 
-    fun getYoum7LinksByCategories(categories: ArrayList<String>): ArrayList<URL> {
-        val linksArray = ArrayList<URL>()
-        categories.forEach {
-            linksArray.add(URL(YOUM7_BASE_URL + it))
-        }
-        return linksArray
-    }
+    fun getRassdLink(): URL = URL(RASSD_BASE_URL)
 
-    fun getAlarabiyaLinksByCategories(categories: ArrayList<String>): ArrayList<URL> {
-        val linksArray = ArrayList<URL>()
-        categories.forEach {
-            linksArray.add(URL(ALARABIYA_BASE_URL + it))
-        }
-        return linksArray
-    }
+    fun getAljazeeraLink(): URL = URL(ALJAZEERA_BASE_URL)
 
-    fun getAlhadathLinksByCategories(categories: ArrayList<String>): ArrayList<URL> {
-        val linksArray = ArrayList<URL>()
-        categories.forEach {
-            if (it == "0")
-                linksArray.add(URL(ALHADTH_ARTICLES_BASE_URL))
-            else
-                linksArray.add(URL(ALHADTH_BASE_URL + it))
-        }
-        return linksArray
-    }
+    fun getArabicBBCLink(): URL = URL(ARABIC_BBC_BASE_URL)
 
-    fun getRassdLink(): URL {
-        return URL(RASSD_BASE_URL)
-    }
-
-    fun getAljazeeraLink(): URL {
-        return URL(ALJAZEERA_BASE_URL)
-    }
-
-    fun getArabicBBCLink(): URL {
-        return URL(ARABIC_BBC_BASE_URL)
-    }
-
-    fun getMadaMasr(): URL {
-        return URL(MADA_MASR_BASE_URL)
-    }
-
+    fun getMadaMasr(): URL = URL(MADA_MASR_BASE_URL)
 }

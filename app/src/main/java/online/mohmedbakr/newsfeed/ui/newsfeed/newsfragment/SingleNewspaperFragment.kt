@@ -16,7 +16,6 @@ import online.mohmedbakr.newsfeed.NewsfeedApplication
 import online.mohmedbakr.newsfeed.R
 import online.mohmedbakr.newsfeed.core.Response
 import online.mohmedbakr.newsfeed.databinding.FragmentSingleNewspaperBinding
-import online.mohmedbakr.newsfeed.data.datasources.remote.ParseRssFeedObject
 import online.mohmedbakr.newsfeed.data.repository.FeedRepository
 import online.mohmedbakr.newsfeed.ui.MainActivity
 import online.mohmedbakr.newsfeed.ui.MainViewModel
@@ -30,8 +29,7 @@ class SingleNewspaperFragment : Fragment() {
 
     private var _binding: FragmentSingleNewspaperBinding? = null
     private val binding get() = _binding!!
-    private val parseRssFeed = ParseRssFeedObject.createRssObject()
-    private val feedRepository = FeedRepository(parseRssFeed)
+    private val feedRepository by lazy { FeedRepository(requireContext().applicationContext) }
     private val viewModel: SingleNewspaperViewModel by viewModels {
         SingleNewspaperViewModelFactory(feedRepository)
     }

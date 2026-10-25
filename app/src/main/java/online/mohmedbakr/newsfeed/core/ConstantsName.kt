@@ -2,37 +2,34 @@ package online.mohmedbakr.newsfeed.core
 
 abstract class ConstantsName {
     companion object {
-        val englishMonths = arrayOf(
+        val englishMonths = listOf(
             "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep",
             "Oct", "Nov", "Dec"
         )
-        val arabicMonths = arrayOf(
+        val arabicMonths = listOf(
             "يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو", "يوليو", "أغسطس", "سبتمبر",
             "أكتوبر", "نوفمبر", "ديسمبر"
         )
 
-        val englishDays = arrayOf(
+        val englishDays = listOf(
             "Sat", "Sun", "Mon", "Tue", "Wed", "Thu", "Fri"
         )
 
-
-        val arabicDays = arrayOf(
+        val arabicDays = listOf(
             "السبت", "الأحد", "الإثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة"
         )
 
-        val arabic_12Hour = arrayOf("ص", "م")
-        val english_12Hour = arrayOf("AM", "PM")
+        val arabic_12Hour = listOf("ص", "م")
+        val english_12Hour = listOf("AM", "PM")
 
-        val newspaperNames = arrayOf(
+        val newspaperNames = listOf(
             "مصراوى",
             "رصد",
             "بى بى سى العربية",
             "مدى مصر",
             "العربية",
             "الحدث",
-            "الجزيرة",
-            //"اليوم السابع"
+            "الجزيرة"
         )
-
     }
 }

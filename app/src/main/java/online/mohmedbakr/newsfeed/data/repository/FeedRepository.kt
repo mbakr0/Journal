@@ -1,38 +1,37 @@
 package online.mohmedbakr.newsfeed.data.repository
 
+import android.content.Context
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import online.mohmedbakr.newsfeed.core.ArticleDTO
 import online.mohmedbakr.newsfeed.core.Response
 import online.mohmedbakr.newsfeed.core.RssLink
-import online.mohmedbakr.newsfeed.data.datasources.remote.ParseRssFeed
+import online.mohmedbakr.newsfeed.data.datasources.remote.rss.ParseRssFeedFactory
 import online.mohmedbakr.newsfeed.data.model.RssElements
+import java.io.File
 import java.net.URL
 
 /**
  * Coordinates RSS source URLs and parsing. All network/parser work runs on [ioDispatcher].
- *
- * The parser is stateful for backwards compatibility, so calls are serialized by this
- * repository instance rather than being launched concurrently.
  */
 class FeedRepository(
-    private val parseRssFeed: ParseRssFeed,
+    private val context: Context? = null,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) {
     private val rssLink = RssLink()
 
     suspend fun getMasrawyFeed(
-        categories: ArrayList<String> = arrayListOf(),
+        categories: List<String> = emptyList(),
     ): Response<ArrayList<ArticleDTO>> = fetchFeeds(
-        urls = rssLink.getMasrawyLinksByCategories(categories.ifEmpty { arrayListOf("25") }),
+        urls = rssLink.getMasrawyLinksByCategories(categories.ifEmpty { listOf("25") }),
         source = RssElements.MASRAWY,
     )
 
     suspend fun getYoum7Feed(
-        categories: ArrayList<String> = arrayListOf(),
+        categories: List<String> = emptyList(),
     ): Response<ArrayList<ArticleDTO>> = fetchFeeds(
-        urls = rssLink.getYoum7LinksByCategories(categories.ifEmpty { arrayListOf("65") }),
+        urls = rssLink.getYoum7LinksByCategories(categories.ifEmpty { listOf("65") }),
         source = RssElements.YOUM7,
     )
 
@@ -43,16 +42,16 @@ class FeedRepository(
         fetchFeed(rssLink.getArabicBBCLink(), RssElements.ARABIC_BBC)
 
     suspend fun getAlarabiyaFeed(
-        categories: ArrayList<String> = arrayListOf(),
+        categories: List<String> = emptyList(),
     ): Response<ArrayList<ArticleDTO>> = fetchFeeds(
-        urls = rssLink.getAlarabiyaLinksByCategories(categories.ifEmpty { arrayListOf(".xml") }),
+        urls = rssLink.getAlarabiyaLinksByCategories(categories.ifEmpty { listOf(".xml") }),
         source = RssElements.ALARABIYA,
     )
 
     suspend fun getAlhadathFeed(
-        categories: ArrayList<String> = arrayListOf(),
+        categories: List<String> = emptyList(),
     ): Response<ArrayList<ArticleDTO>> = fetchFeeds(
-        urls = rssLink.getAlhadathLinksByCategories(categories.ifEmpty { arrayListOf("3") }),
+        urls = rssLink.getAlhadathLinksByCategories(categories.ifEmpty { listOf("3") }),
         source = RssElements.ALHADATH,
     )
 
@@ -71,23 +70,24 @@ class FeedRepository(
         urls: List<URL>,
         source: String,
     ): Response<ArrayList<ArticleDTO>> = withContext(ioDispatcher) {
-        parseRssFeed.clearArticleList()
-
         if (urls.isEmpty()) {
             return@withContext Response.Success(arrayListOf())
         }
 
+        val parser = ParseRssFeedFactory.getParser(source)
+        val combinedArticles = ArrayList<ArticleDTO>()
+
         for (url in urls) {
-            parseRssFeed.setNameAndUrl(url, source)
-            when (val result = parseRssFeed.response) {
+            val cacheFile = context?.cacheDir?.let { cacheDir ->
+                File(cacheDir, "feed_${url.toString().hashCode()}.xml")
+            }
+            when (val result = parser.parse(url, cacheFile)) {
                 is Response.Error -> return@withContext result
-                is Response.Success -> Unit
+                is Response.Success -> combinedArticles.addAll(result.data)
             }
         }
 
-        when (val result = parseRssFeed.response) {
-            is Response.Success -> Response.Success(ArrayList(result.data.distinctBy { it.link.trim() }))
-            is Response.Error -> result
-        }
+        val uniqueArticles = ArrayList(combinedArticles.distinctBy { it.link.trim() })
+        Response.Success(uniqueArticles)
     }
 }
