@@ -17,7 +17,8 @@
     <string name="refresh">Refresh</string>
 
     <string name="theNews">الأخبار</string>
-    <string name="sports">رياضة</string>
+    <string name="Iraq">العراق</string>
+    <string name="SaudiArabia">السعودية</string>
     <string name="lifeStyle">لايف ستايل</string>
     <string name="arts">فنون</string>
     <string name="cars">سيارات</string>
@@ -26,7 +27,7 @@
     <string name="Egypt">مصر</string>
     <string name="ArabsAndTheWorld">عرب وعالم</string>
     <string name="Journalism">صحافة</string>
-    <string name="Economy">إقتصاد</string>
+    <string name="Morocco">المغرب</string>
     <string name="accidents">حوادث</string>
     <string name="Governorates">محافظات</string>
     <string name="ReportsAndInvestigations">تقارير وتحقيقات</string>
@@ -35,7 +36,14 @@
     <string name="Technology">علوم وتكنولوجيا</string>
     <string name="oldNews">أخبار زمان</string>
     <string name="local">أخبار محلية</string>
-    <string name="ArabAndWorldNews">أخبار عربية وعالمية</string>
+
+    <string name="Economy">أقتصاد</string>
+    <string name="sports">رياضة</string>
+    <string name="HealthAndMedicine">الصحة</string>
+    <string name="Miscellaneous">متنوع</string>
+
+    <string name="ArabAndWorldNews">أخبار الصفحة الرئيسية</string>
+
     <string name="otherSports">رياضات أخرى</string>
     <string name="opinions">آراء حرة</string>
     <string name="PhotoAlbum">ألبوم الصور</string>
@@ -75,12 +83,11 @@
     <string name="InternationalNews">أخبار عالمية</string>
     <string name="culture">ثقافة</string>
     <string name="WomenAndMiscellaneous">المرأة والمنوعات</string>
-    <string name="HealthAndMedicine">صحة و طب</string>
     <string name="CitizenJournalism">صحافة المواطن</string>
     <string name="SeventhDayAlbums">ألبومات اليوم السابع</string>
     <string name="ComicsToday">كاريكاتير اليوم</string>
     <string name="Horoscope">حظك اليوم</string>
-    <string name="SaudiArabia">السعودية</string>
-    <string name="Miscellaneous">منوعة</string>
+    <string name="Yaman">اليمن</string>
+    <string name="Syria">سوريا</string>
     <string name="recentNews">أخبار الأخيرة</string>
 </resources>

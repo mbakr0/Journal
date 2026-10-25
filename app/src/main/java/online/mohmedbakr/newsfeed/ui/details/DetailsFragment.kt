@@ -3,6 +3,7 @@ package online.mohmedbakr.newsfeed.ui.details
 import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -31,6 +32,7 @@ class DetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val link = DetailsFragmentArgs.fromBundle(requireArguments()).link
+        Log.d("LOG_D",link)
         binding.loading.visibility = View.VISIBLE
 
         binding.webView.settings.apply {

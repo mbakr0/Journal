@@ -1,5 +1,6 @@
 package online.mohmedbakr.newsfeed.util
 
+import android.util.Log
 import java.time.Duration
 import java.time.Instant
 import java.time.LocalDateTime
@@ -28,7 +29,8 @@ fun calculateDate(publicationDate: String?): String {
             else -> format(seconds / 29030400, "year")
         }
 
-    } catch (_: Exception) {
+    } catch (e: Exception) {
+        e.message?.let { Log.d("LOG_S","$it + $publicationDate") }
        publicationDate
     }
 }

@@ -9,7 +9,7 @@ class ParseMadaMasrFeed : ParseRssFeed(
     imageExtractor = MadaMasrImageExtractor()
 ) {
     override fun normalizeArticleLink(link: String): String =
-        link.trim().replace("https://", "https://mada34.appspot.com/")
+        link.trim()
 
     override fun extractDescription(value: String): String {
         val raw = cleanRawDescriptionText(value)

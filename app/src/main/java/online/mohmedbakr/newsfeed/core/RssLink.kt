@@ -9,10 +9,9 @@ class RssLink {
         private const val MASRAWY_BASE_URL = "https://www.masrawy.com//rss/feed/"
         private const val ALARABIYA_BASE_URL = "https://www.alarabiya.net/feed/rss2/ar"
 
-        private const val ALHADTH_BASE_URL = "https://alhadth-online.com/rss.php?cat="
-        private const val ALHADTH_ARTICLES_BASE_URL = "https://alhadth-online.com/arts_rss.php/"
+        private const val ALHADTH_BASE_URL = "https://www.alhadath.net/.mrss/alhadath"
 
-        private const val RASSD_BASE_URL = "https://rassd.net/feed"
+        private const val RASSD_BASE_URL = "https://rassd.com/feed"
 
         private const val ALJAZEERA_BASE_URL =
             "https://1-a1072.azureedge.net/aljazeerarss/a7c186be-1baa-4bd4-9d80-a84db769f779/73d0e1b4-532f-45ef-b135-bfdff8b8cab9"
@@ -32,8 +31,7 @@ class RssLink {
 
     fun getAlhadathLinksByCategories(categories: List<String>): List<URL> =
         categories.map { cat ->
-            if (cat == "0") URL(ALHADTH_ARTICLES_BASE_URL)
-            else URL(ALHADTH_BASE_URL + cat)
+            URL(ALHADTH_BASE_URL + cat)
         }
 
     fun getRassdLink(): URL = URL(RASSD_BASE_URL)

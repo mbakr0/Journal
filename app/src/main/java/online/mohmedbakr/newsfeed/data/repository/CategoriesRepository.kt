@@ -15,7 +15,7 @@ class CategoriesRepository(resources: Resources) {
         return newspaperCategories.getYoum7Categories()
     }
 
-    fun getAlhadath(): HashMap<String, Int> {
+    fun getAlhadath(): HashMap<String, String> {
         return newspaperCategories.getAlhadathCategories()
     }
 

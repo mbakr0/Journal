@@ -8,18 +8,20 @@ object RssTextUtils {
     private val PARAGRAPH_TAG_REGEX = Regex("(?is)<p\\b[^>]*>(.*?)</p>")
 
     fun cleanRawDescription(value: String): String =
-        value.replace("\\n", " ")
-            .replace("/n", " ")
-            .replace("&quot;", "\"")
+        value
+            //.replace("\\n", " ")
+          //  .replace("/n", " ")
+           // .replace("&quot;", "\"")
             .trim()
 
     fun cleanHtmlTags(text: String): String =
-        text.replace(SCRIPT_TAG_REGEX, " ")
-            .replace(STYLE_TAG_REGEX, " ")
-            .replace(HTML_TAG_REGEX, " ")
-            .replace("&amp;", "&")
-            .replace("&nbsp;", " ")
-            .replace(WHITESPACE_REGEX, " ")
+        text
+           // .replace(SCRIPT_TAG_REGEX, " ")
+       //     .replace(STYLE_TAG_REGEX, " ")
+         //   .replace(HTML_TAG_REGEX, " ")
+        //  .replace("&amp;", "&")
+        //   .replace("&nbsp;", " ")
+      //      .replace(WHITESPACE_REGEX, " ")
             .trim()
 
     fun extractParagraphText(text: String): String =

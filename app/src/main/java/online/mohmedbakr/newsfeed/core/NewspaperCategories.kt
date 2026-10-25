@@ -8,7 +8,7 @@ class NewspaperCategories(private val resources: Resources) {
     private val masrawyCategories: HashMap<String, HashMap<String, Int>> = HashMap()
     private val youm7Categories: HashMap<String, Int> = HashMap()
     private val alarabiyaCategories: HashMap<String, String> = HashMap()
-    private val alhadathCategories: HashMap<String, Int> = HashMap()
+    private val alhadathCategories: HashMap<String, String> = HashMap()
     private val category: HashMap<String, Int> = HashMap()
 
 
@@ -139,15 +139,14 @@ class NewspaperCategories(private val resources: Resources) {
         return alarabiyaCategories
     }
 
-    fun getAlhadathCategories(): HashMap<String, Int> {
+    fun getAlhadathCategories(): HashMap<String, String> {
 
-        alhadathCategories[resources.getString(R.string.ArabAndWorldNews)] = 2
-        alhadathCategories[resources.getString(R.string.SaudiArabia)] = 3
-        alhadathCategories[resources.getString(R.string.Miscellaneous)] = 4
-        alhadathCategories[resources.getString(R.string.HealthAndMedicine)] = 6
-        alhadathCategories[resources.getString(R.string.sports)] = 7
-        alhadathCategories[resources.getString(R.string.Economy)] = 8
-        alhadathCategories[resources.getString(R.string.Articles)] = 0
+        alhadathCategories[resources.getString(R.string.ArabAndWorldNews)] = ".xml"
+        alhadathCategories[resources.getString(R.string.Yaman)] = "/yemen.xml"
+        alhadathCategories[resources.getString(R.string.Syria)] = "/syria.xml"
+        alhadathCategories[resources.getString(R.string.Egypt)] = "/egypt.xml"
+        alhadathCategories[resources.getString(R.string.Iraq)] = "/iraq.xml"
+        alhadathCategories[resources.getString(R.string.Morocco)] = "/maghreb.xml"
 
         return alhadathCategories
     }

@@ -21,6 +21,7 @@ abstract class ParseRssFeed(
         protected set
 
     open fun parse(url: URL, cacheFile: File? = null): Response<ArrayList<ArticleDTO>> {
+        Log.d("LOG_SOURCE", url.toString())
         return try {
             val articles = if (cacheFile != null) {
                 // Download to local cache file first
@@ -64,17 +65,6 @@ abstract class ParseRssFeed(
             response = err
             err
         }
-    }
-
-    open fun setNameAndUrl(url: URL, newspaperName: String, cacheDirectory: File? = null) {
-        val uniqueCacheName = "feed_${url.toString().hashCode()}.xml"
-        val cacheFile = cacheDirectory?.let { File(it, uniqueCacheName) }
-        parse(url, cacheFile)
-    }
-
-    open fun clearArticleList() {
-        articleList.clear()
-        response = Response.Success(articleList)
     }
 
     open fun normalizeArticleLink(link: String): String = link.trim()
